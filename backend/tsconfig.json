@@ -1,0 +1,88 @@
+{
+  // ============================================
+  // TS-NODE CONFIGURATION (for running TypeScript directly)
+  // ============================================
+  "ts-node": {
+    // Enable ES Modules support in ts-node
+    "esm": true,
+    // Use experimental ESM loader
+    "experimentalEsm": true
+  },
+  
+  // ============================================
+  // TYPESCRIPT COMPILER OPTIONS
+  // ============================================
+  "compilerOptions": {
+    // Root directory where TypeScript source files are located
+    "rootDir": "./src",
+    
+    // Output directory where compiled JavaScript files will be generated
+    "outDir": "./dist",
+    
+    // Module system to use (es2020 = modern JavaScript modules)
+    "module": "es2020",
+    
+    // Target JavaScript version to compile to (es2020 = modern browsers and Node.js)
+    "target": "es2020",
+    
+    // Standard library definitions to include (es2020 = latest features)
+    "lib": ["es2020"],
+    
+    // Include Node.js type definitions for built-in modules
+    "types": ["node"],
+    
+    // How to resolve module imports (bundler = modern approach)
+    "moduleResolution": "bundler",
+    
+    // Generate source maps for debugging (maps compiled JS back to original TS)
+    "sourceMap": true,
+    
+    // Generate .d.ts files for type definitions
+    "declaration": true,
+    
+    // Generate source maps for declaration files
+    "declarationMap": true,
+    
+    // Prevent accessing array elements without checking bounds
+    "noUncheckedIndexedAccess": true,
+    
+    // Require explicit types for optional properties
+    "exactOptionalPropertyTypes": true,
+    
+    // Enable strict type checking (catches more errors)
+    "strict": true,
+    
+    // Require explicit type annotations for module syntax
+    "verbatimModuleSyntax": true,
+    
+    // Ensure each file can be safely transpiled independently
+    "isolatedModules": true,
+    
+    // Warn about imports that may have side effects
+    "noUncheckedSideEffectImports": true,
+    
+    // Automatically detect module type (ESM vs CommonJS)
+    "moduleDetection": "force",
+    
+    // Skip type checking of declaration files (speeds up compilation)
+    "skipLibCheck": true,
+    
+    // Allow importing CommonJS modules in ES modules
+    "esModuleInterop": true,
+    
+    // Allow importing JSON files as modules
+    "resolveJsonModule": true
+  },
+  
+  // ============================================
+  // FILES TO INCLUDE IN COMPILATION
+  // ============================================
+  // Include all TypeScript files in the src directory and subdirectories
+  "include": ["src/**/*"],
+  
+  // ============================================
+  // FILES TO EXCLUDE FROM COMPILATION
+  // ============================================
+  // Exclude node_modules folder from compilation
+  "exclude": ["node_modules"]
+}
