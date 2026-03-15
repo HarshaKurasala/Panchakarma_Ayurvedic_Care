@@ -1,15 +1,18 @@
 'use client';
 
-const navItems = [
-  { icon: 'grid_view', label: 'Dashboard', active: true },
-  { icon: 'person_outline', label: 'Patients' },
-  { icon: 'medical_services', label: 'Specialists' },
-  { icon: 'calendar_today', label: 'Appointments' },
-  { icon: 'monitoring', label: 'Treatments' },
-  { icon: 'receipt_long', label: 'Financials' },
-];
+interface SidebarProps {
+  activePage?: string;
+}
 
-export default function Sidebar() {
+export default function Sidebar({ activePage = 'Dashboard' }: SidebarProps) {
+  const navItems = [
+    { icon: 'grid_view', label: 'Dashboard', href: '/admin/dashboard' },
+    { icon: 'person_outline', label: 'Patients', href: '/admin/patients' },
+    { icon: 'medical_services', label: 'Specialists', href: '#' },
+    { icon: 'calendar_today', label: 'Appointments', href: '#' },
+    { icon: 'monitoring', label: 'Treatments', href: '#' },
+    { icon: 'receipt_long', label: 'Financials', href: '#' },
+  ];
   return (
     <aside style={{
       width: '256px', minWidth: '256px', height: '100vh',
@@ -35,20 +38,23 @@ export default function Sidebar() {
 
       {/* Nav */}
       <nav style={{ flex: 1, padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto' }}>
-        {navItems.map((item) => (
-          <a key={item.label} href="#" style={{
-            display: 'flex', alignItems: 'center', gap: '12px',
-            padding: '10px 12px', borderRadius: '10px', textDecoration: 'none',
-            fontSize: '14px', fontWeight: item.active ? 600 : 400,
-            background: item.active ? 'linear-gradient(135deg, #066046 0%, #034230 100%)' : 'transparent',
-            color: item.active ? '#ffffff' : '#64748b',
-            boxShadow: item.active ? '0 4px 12px -2px rgba(6,96,70,0.3)' : 'none',
-            transition: 'all 0.15s',
-          }}>
-            <span className="material-symbols-outlined" style={{ fontSize: '22px' }}>{item.icon}</span>
-            <span style={{ fontSize: '14px' }}>{item.label}</span>
-          </a>
-        ))}
+        {navItems.map((item) => {
+          const isActive = item.label === activePage;
+          return (
+            <a key={item.label} href={item.href} style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              padding: '10px 12px', borderRadius: '10px', textDecoration: 'none',
+              fontSize: '14px', fontWeight: isActive ? 600 : 400,
+              background: isActive ? 'linear-gradient(135deg, #066046 0%, #034230 100%)' : 'transparent',
+              color: isActive ? '#ffffff' : '#64748b',
+              boxShadow: isActive ? '0 4px 12px -2px rgba(6,96,70,0.3)' : 'none',
+              transition: 'all 0.15s',
+            }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '22px' }}>{item.icon}</span>
+              <span style={{ fontSize: '14px' }}>{item.label}</span>
+            </a>
+          );
+        })}
       </nav>
 
       <div style={{ height: '16px' }} />
