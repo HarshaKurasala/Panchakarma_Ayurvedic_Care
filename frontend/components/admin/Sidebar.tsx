@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 interface SidebarProps {
   activePage?: string;
 }
@@ -13,12 +15,13 @@ export default function Sidebar({ activePage = 'Dashboard' }: SidebarProps) {
     { icon: 'monitoring', label: 'Treatments', href: '#' },
     { icon: 'receipt_long', label: 'Financials', href: '#' },
   ];
+
   return (
-    <aside style={{
+    <aside className="hidden lg:flex" style={{
       width: '256px', minWidth: '256px', height: '100vh',
       background: '#ffffff',
       borderRight: '1px solid #e2e8f0',
-      display: 'flex', flexDirection: 'column',
+      flexDirection: 'column',
       fontFamily: "'Plus Jakarta Sans', sans-serif",
     }}>
       {/* Logo */}

@@ -7,18 +7,19 @@ export default function Header() {
       background: '#ffffff',
       borderBottom: '1px solid #e2e8f0',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      padding: '0 32px',
+      padding: '0 16px',
       fontFamily: "'Plus Jakarta Sans', sans-serif",
-    }}>
+    }}
+    className="px-4 md:px-8">
       {/* Search */}
-      <div style={{ position: 'relative', width: '384px' }}>
+      <div className="hidden md:block" style={{ position: 'relative', width: '100%', maxWidth: '384px' }}>
         <span className="material-symbols-outlined" style={{
           position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)',
           color: '#94a3b8', fontSize: '20px',
         }}>search</span>
         <input
           type="text"
-          placeholder="Search patients, records or treatments..."
+          placeholder="Search patients, records..."
           style={{
             width: '100%', padding: '8px 16px 8px 40px',
             background: '#f1f5f9', border: 'none',
@@ -29,13 +30,18 @@ export default function Header() {
         />
       </div>
 
+      {/* Mobile Title */}
+      <div className="block md:hidden">
+        <h1 style={{ fontSize: '18px', fontWeight: 700, color: '#066046' }}>Panchakarma</h1>
+      </div>
+
       {/* Right */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        {/* Mic */}
-        <button style={{
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} className="md:gap-4">
+        {/* Mic - Hidden on mobile */}
+        <button className="hidden md:flex" style={{
           width: '40px', height: '40px', borderRadius: '50%', border: 'none',
           background: 'transparent', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          alignItems: 'center', justifyContent: 'center',
           position: 'relative',
         }}>
           <span className="material-symbols-outlined" style={{ fontSize: '22px', color: '#64748b' }}>mic</span>
@@ -56,17 +62,17 @@ export default function Header() {
           }} />
         </button>
 
-        {/* Settings */}
-        <button style={{
+        {/* Settings - Hidden on mobile */}
+        <button className="hidden md:flex" style={{
           width: '40px', height: '40px', borderRadius: '50%', border: 'none',
           background: 'transparent', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          alignItems: 'center', justifyContent: 'center',
         }}>
           <span className="material-symbols-outlined" style={{ fontSize: '22px', color: '#64748b' }}>settings</span>
         </button>
 
-        {/* Divider */}
-        <div style={{ width: '1px', height: '24px', background: '#e2e8f0' }} />
+        {/* Divider - Hidden on mobile */}
+        <div className="hidden md:block" style={{ width: '1px', height: '24px', background: '#e2e8f0' }} />
 
         {/* Profile */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
@@ -78,7 +84,7 @@ export default function Header() {
           }}>
             <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>person</span>
           </div>
-          <span style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a' }}>Alexander Pierce</span>
+          <span className="hidden md:inline" style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a' }}>Alexander Pierce</span>
         </div>
       </div>
     </header>

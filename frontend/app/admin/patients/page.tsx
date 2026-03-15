@@ -69,100 +69,133 @@ export default function PatientsPage() {
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <Header />
 
-        <div style={{ flex: 1, overflowY: 'auto', padding: '24px', background: '#F8FAFB', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '16px', background: '#F8FAFB', fontFamily: "'Plus Jakarta Sans', sans-serif" }} className="md:p-6">
           {/* Header Actions */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-800">Patients</h1>
-              <p className="text-sm text-slate-500">Manage and view all registered patient records</p>
-            </div>
-            <button className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-              </svg>
-              Add Patient
-            </button>
-          </div>
-
-          {/* Filters Section */}
-          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center gap-4">
-            <div className="flex-1 min-w-[240px]">
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                  <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                  </svg>
-                </span>
-                <input className="block w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-emerald-500 focus:border-emerald-500" placeholder="Filter by name or ID..." type="text" />
+          <div style={{ marginBottom: '20px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }} className="sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#1e293b' }} className="md:text-2xl">Patients</h1>
+                <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }} className="md:text-sm">Manage and view all registered patient records</p>
               </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <select className="text-sm border-slate-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 min-w-[120px]">
-                <option value="">Dosha Type</option>
-                <option value="vata">Vata</option>
-                <option value="pitta">Pitta</option>
-                <option value="kapha">Kapha</option>
-                <option value="vata-pitta">Vata-Pitta</option>
-              </select>
-              <select className="text-sm border-slate-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 min-w-[120px]">
-                <option value="">Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-              <select className="text-sm border-slate-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 min-w-[120px]">
-                <option value="">Status</option>
-                <option value="active">Active Treatment</option>
-                <option value="completed">Completed</option>
-                <option value="new">New Patient</option>
-              </select>
-              <button className="p-2 text-slate-500 hover:bg-slate-50 rounded-lg border border-slate-200" title="Clear Filters">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                </svg>
+              <button style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                padding: '10px 16px', background: '#059669', color: '#fff',
+                fontSize: '14px', fontWeight: 600, borderRadius: '8px',
+                border: 'none', cursor: 'pointer', whiteSpace: 'nowrap',
+              }}>
+                <span className="material-symbols-outlined" style={{ fontSize: '20px', marginRight: '6px' }}>add</span>
+                Add Patient
               </button>
             </div>
           </div>
 
+          {/* Filters Section */}
+          <div style={{
+            background: '#fff', padding: '16px', borderRadius: '12px',
+            border: '1px solid #e2e8f0', marginBottom: '20px',
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }} className="md:flex-row md:items-center">
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <div style={{ position: 'relative' }}>
+                  <span className="material-symbols-outlined" style={{
+                    position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)',
+                    color: '#94a3b8', fontSize: '18px',
+                  }}>search</span>
+                  <input
+                    type="text"
+                    placeholder="Filter by name or ID..."
+                    style={{
+                      width: '100%', padding: '8px 12px 8px 40px',
+                      border: '1px solid #e2e8f0', borderRadius: '8px',
+                      fontSize: '14px', outline: 'none',
+                    }}
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <select style={{
+                  padding: '8px 12px', fontSize: '14px',
+                  border: '1px solid #e2e8f0', borderRadius: '8px',
+                  background: '#fff', minWidth: '120px',
+                }}>
+                  <option value="">Dosha Type</option>
+                  <option value="vata">Vata</option>
+                  <option value="pitta">Pitta</option>
+                  <option value="kapha">Kapha</option>
+                </select>
+                <select style={{
+                  padding: '8px 12px', fontSize: '14px',
+                  border: '1px solid #e2e8f0', borderRadius: '8px',
+                  background: '#fff', minWidth: '100px',
+                }}>
+                  <option value="">Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+                <button style={{
+                  padding: '8px', border: '1px solid #e2e8f0',
+                  borderRadius: '8px', background: '#fff', cursor: 'pointer',
+                }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '20px', color: '#64748b' }}>refresh</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
           {/* Patients Table */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+          <div style={{
+            background: '#fff', borderRadius: '12px',
+            border: '1px solid #e2e8f0', overflow: 'hidden',
+          }}>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '800px' }}>
                 <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200">
-                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Patient ID</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Age/Gender</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Dosha Type</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Medical History</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Action</th>
+                  <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Patient ID</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Name</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Age/Gender</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Dosha Type</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontSize: '11px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Medical History</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'right', fontSize: '11px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase' }}>Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody>
                   {patients.map((patient) => (
-                    <tr key={patient.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 text-sm font-medium text-slate-600">{patient.id}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-8 h-8 rounded-full bg-${patient.avatarColor}-100 flex items-center justify-center text-${patient.avatarColor}-700 font-bold text-xs`}>
+                    <tr key={patient.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td style={{ padding: '12px 16px', fontSize: '13px', fontWeight: 500, color: '#475569' }}>{patient.id}</td>
+                      <td style={{ padding: '12px 16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <div style={{
+                            width: '32px', height: '32px', borderRadius: '50%',
+                            background: '#dbeafe', display: 'flex', alignItems: 'center',
+                            justifyContent: 'center', fontSize: '11px', fontWeight: 700, color: '#1e40af',
+                          }}>
                             {patient.initials}
                           </div>
-                          <span className="text-sm font-semibold text-slate-800">{patient.name}</span>
+                          <span style={{ fontSize: '14px', fontWeight: 600, color: '#1e293b' }}>{patient.name}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-600">{patient.age} / {patient.gender}</td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${patient.doshaColor}-100 text-${patient.doshaColor}-800`}>
+                      <td style={{ padding: '12px 16px', fontSize: '13px', color: '#475569' }}>{patient.age} / {patient.gender}</td>
+                      <td style={{ padding: '12px 16px' }}>
+                        <span style={{
+                          display: 'inline-block', padding: '4px 10px', borderRadius: '12px',
+                          fontSize: '11px', fontWeight: 600, background: '#fef3c7', color: '#92400e',
+                        }}>
                           {patient.dosha}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-500">
-                        <span className="truncate block max-w-[200px]" title={patient.history}>
-                          {patient.history.substring(0, 35)}...
+                      <td style={{ padding: '12px 16px', fontSize: '13px', color: '#64748b', maxWidth: '200px' }}>
+                        <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {patient.history}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <button className="text-emerald-600 hover:text-emerald-700 text-sm font-semibold">View Profile</button>
+                      <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                        <button style={{
+                          color: '#059669', fontSize: '13px', fontWeight: 600,
+                          background: 'none', border: 'none', cursor: 'pointer',
+                        }}>
+                          View Profile
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -171,14 +204,37 @@ export default function PatientsPage() {
             </div>
 
             {/* Pagination */}
-            <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-sm text-slate-500">Showing 1 to 5 of 48 entries</span>
-              <div className="flex gap-2">
-                <button className="px-3 py-1 border border-slate-200 rounded-md text-sm text-slate-400 cursor-not-allowed">Previous</button>
-                <button className="px-3 py-1 bg-emerald-600 text-white border border-emerald-600 rounded-md text-sm">1</button>
-                <button className="px-3 py-1 border border-slate-200 rounded-md text-sm text-slate-600 hover:bg-slate-50">2</button>
-                <button className="px-3 py-1 border border-slate-200 rounded-md text-sm text-slate-600 hover:bg-slate-50">3</button>
-                <button className="px-3 py-1 border border-slate-200 rounded-md text-sm text-slate-600 hover:bg-slate-50">Next</button>
+            <div style={{
+              padding: '16px', borderTop: '1px solid #f1f5f9',
+              display: 'flex', flexDirection: 'column', gap: '12px',
+            }} className="sm:flex-row sm:items-center sm:justify-between">
+              <span style={{ fontSize: '13px', color: '#64748b' }}>Showing 1 to 5 of 48 entries</span>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                <button style={{
+                  padding: '6px 12px', border: '1px solid #e2e8f0',
+                  borderRadius: '6px', fontSize: '13px', color: '#94a3b8',
+                  background: '#fff', cursor: 'not-allowed',
+                }}>Previous</button>
+                <button style={{
+                  padding: '6px 12px', background: '#059669',
+                  border: '1px solid #059669', borderRadius: '6px',
+                  fontSize: '13px', color: '#fff', cursor: 'pointer',
+                }}>1</button>
+                <button style={{
+                  padding: '6px 12px', border: '1px solid #e2e8f0',
+                  borderRadius: '6px', fontSize: '13px', color: '#475569',
+                  background: '#fff', cursor: 'pointer',
+                }}>2</button>
+                <button style={{
+                  padding: '6px 12px', border: '1px solid #e2e8f0',
+                  borderRadius: '6px', fontSize: '13px', color: '#475569',
+                  background: '#fff', cursor: 'pointer',
+                }}>3</button>
+                <button style={{
+                  padding: '6px 12px', border: '1px solid #e2e8f0',
+                  borderRadius: '6px', fontSize: '13px', color: '#475569',
+                  background: '#fff', cursor: 'pointer',
+                }}>Next</button>
               </div>
             </div>
           </div>
