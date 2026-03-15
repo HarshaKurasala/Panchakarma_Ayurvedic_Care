@@ -1,7 +1,8 @@
 /**
  * DATABASE CONFIGURATION
  * 
- * PostgreSQL connection pool setup
+ * PostgreSQL connection pool setup for the Panchakarma management system.
+ * Manages database connections efficiently by reusing connections instead of creating new ones for each query.
  * 
  * This file is compiled to: dist/config/db.js
  * 

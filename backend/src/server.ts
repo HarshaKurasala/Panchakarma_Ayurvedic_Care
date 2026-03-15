@@ -1,7 +1,9 @@
 /**
  * PANCHAKARMA MANAGEMENT SYSTEM - BACKEND SERVER
  * 
- * Main Express server configuration and API endpoints
+ * Main Express server that handles all API routes for the Panchakarma management system.
+ * Provides endpoints for dashboard, patients, appointments, therapies, lab reports, payments, and authentication.
+ * Includes database connection testing and health check endpoints.
  * 
  * This file is compiled to: dist/server.js
  * Build command: npm run build
@@ -21,6 +23,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { pool } from "./config/db.js";
 import dashboardRoutes from "./routes/dashboard.js";
+import patientsRoutes from "./routes/patients.js";
+import appointmentsRoutes from "./routes/appointments.js";
+import therapiesRoutes from "./routes/therapies.js";
+import labReportsRoutes from "./routes/lab-reports.js";
+import paymentsRoutes from "./routes/payments.js";
+import authRoutes from "./routes/auth.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -33,7 +41,13 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
+app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/patients", patientsRoutes);
+app.use("/api/appointments", appointmentsRoutes);
+app.use("/api/therapies", therapiesRoutes);
+app.use("/api/lab-reports", labReportsRoutes);
+app.use("/api/payments", paymentsRoutes);
 
 /**
  * ENDPOINT: GET /

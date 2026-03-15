@@ -6,6 +6,9 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon --exec node --loader ts-node/esm src/server.ts",
+    "create-db": "node --loader ts-node/esm src/create-db.ts",
+    "setup-db": "node --loader ts-node/esm src/setup-db.ts",
+    "init": "npm run create-db && npm run setup-db",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,6 +16,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.7",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
