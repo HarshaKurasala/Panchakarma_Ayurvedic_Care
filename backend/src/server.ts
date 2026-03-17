@@ -29,6 +29,7 @@ import therapiesRoutes from "./routes/therapies.js";
 import labReportsRoutes from "./routes/lab-reports.js";
 import paymentsRoutes from "./routes/payments.js";
 import authRoutes from "./routes/auth.js";
+import doctorsRoutes from "./routes/doctors.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -44,6 +45,7 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/patients", patientsRoutes);
+app.use("/api/doctors", doctorsRoutes);
 app.use("/api/appointments", appointmentsRoutes);
 app.use("/api/therapies", therapiesRoutes);
 app.use("/api/lab-reports", labReportsRoutes);

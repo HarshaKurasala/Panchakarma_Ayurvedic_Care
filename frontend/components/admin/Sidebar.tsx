@@ -10,7 +10,7 @@ export default function Sidebar({ activePage = 'Dashboard' }: SidebarProps) {
   const navItems = [
     { icon: 'grid_view', label: 'Dashboard', href: '/admin/dashboard' },
     { icon: 'person_outline', label: 'Patients', href: '/admin/patients' },
-    { icon: 'medical_services', label: 'Specialists', href: '#' },
+    { icon: 'medical_services', label: 'Specialists', href: '/admin/specialists' },
     { icon: 'calendar_today', label: 'Appointments', href: '#' },
     { icon: 'monitoring', label: 'Treatments', href: '#' },
     { icon: 'receipt_long', label: 'Financials', href: '#' },

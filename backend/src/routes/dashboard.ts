@@ -1,4 +1,4 @@
-// Dashboard Routes - Provides endpoints for admin dashboard statistics, active treatments, recent payments, and registration analytics
+// Dashboard Routes - Provides endpoints for admin dashboard statistics, active treatments, recent payments, registration analytics, and revenue mix
 
 import { Router } from "express";
 import { pool } from "../config/db.js";
@@ -85,6 +85,38 @@ router.get("/analytics", async (req, res) => {
       ORDER BY EXTRACT(MONTH FROM created_at)
     `);
     res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
+  }
+});
+
+// Get revenue mix breakdown by category
+router.get("/revenue-mix", async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        category,
+        SUM(amount) as total,
+        COUNT(*) as count
+      FROM payments
+      WHERE status = 'paid'
+      GROUP BY category
+      ORDER BY total DESC
+    `);
+    
+    const totalRevenue = result.rows.reduce((sum, row) => sum + parseFloat(row.total), 0);
+    
+    const revenueMix = result.rows.map(row => ({
+      category: row.category,
+      total: parseFloat(row.total),
+      count: parseInt(row.count),
+      percentage: ((parseFloat(row.total) / totalRevenue) * 100).toFixed(1)
+    }));
+
+    res.json({
+      revenueMix,
+      totalRevenue
+    });
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
   }
