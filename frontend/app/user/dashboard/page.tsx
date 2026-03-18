@@ -26,7 +26,7 @@ export default function UserDashboard() {
             <span className="material-symbols-outlined">calendar_today</span>
             My Appointments
           </a>
-          <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/5 hover:text-primary transition-colors" href="#">
+          <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/5 hover:text-primary transition-colors" href="/user/treatments">
             <span className="material-symbols-outlined">medical_services</span>
             My Treatments
           </a>
