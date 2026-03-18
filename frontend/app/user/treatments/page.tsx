@@ -55,7 +55,7 @@ export default function TreatmentsPage() {
           </a>
           <a
             className="flex items-center space-x-3 p-3 rounded-xl text-[#6b7280] hover:bg-[#ecf3f0] transition-colors"
-            href="#"
+            href="/user/billing"
           >
             <span className="material-symbols-outlined text-xl">receipt_long</span>
             <span className="font-medium">Billing</span>
