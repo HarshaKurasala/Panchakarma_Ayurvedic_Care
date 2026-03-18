@@ -14,7 +14,7 @@ export default function UserAppointments() {
             </svg>
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#064e3b] leading-none">AyurCare</h1>
+            <h1 className="text-xl font-bold text-[#064e3b] leading-none">Panchakarma</h1>
             <p className="text-[10px] text-[#6b7280]">Wellness Portal</p>
           </div>
         </div>
@@ -35,7 +35,7 @@ export default function UserAppointments() {
           </a>
           <a
             className="flex items-center space-x-3 p-3 rounded-xl text-[#6b7280] hover:bg-[#ecf3f0] transition-colors"
-            href="#"
+            href="/user/treatments"
           >
             <span className="material-symbols-outlined text-xl">spa</span>
             <span className="font-medium">My Treatments</span>
