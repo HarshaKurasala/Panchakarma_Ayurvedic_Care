@@ -155,16 +155,6 @@ export default function SettingsPage() {
             >
               Theme & Display
             </button>
-            <button
-              onClick={() => setActiveTab('connected')}
-              className={`border-b-2 py-4 px-1 font-medium text-sm whitespace-nowrap transition-colors ${
-                activeTab === 'connected'
-                  ? 'border-[#064e3b] text-[#064e3b]'
-                  : 'border-transparent text-gray-500 hover:text-[#064e3b] hover:border-gray-200'
-              }`}
-            >
-              Connected Applications
-            </button>
           </nav>
         </div>
 
@@ -335,38 +325,11 @@ export default function SettingsPage() {
                 <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
                   <div className="bg-[#064e3b] h-full w-[85%]"></div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">Active Sensors</span>
-                  <span className="text-sm font-bold text-[#064e3b]">4</span>
-                </div>
                 <p className="text-[11px] text-gray-400 pt-2 border-t border-gray-200">Last security check: 2 days ago</p>
               </div>
             </div>
 
-            {/* Connected Devices */}
-            <div className="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm">
-              <h5 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Connected Devices</h5>
-              <div className="space-y-3">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center mr-3">
-                    <span className="material-symbols-outlined text-lg">watch</span>
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-gray-800">AyurWatch Pro</p>
-                    <p className="text-[10px] text-green-500 font-medium">Syncing now...</p>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-orange-50 text-orange-600 rounded-lg flex items-center justify-center mr-3">
-                    <span className="material-symbols-outlined text-lg">smartphone</span>
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-gray-800">iPhone 15 Pro</p>
-                    <p className="text-[10px] text-gray-400">Last sync 2h ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
       </main>
