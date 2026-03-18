@@ -2,7 +2,7 @@
 
 export default function UserAppointments() {
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-gray-50">
       <aside
         className="w-64 bg-white border-r border-gray-200 flex flex-col h-full sticky top-0"
         data-purpose="main-navigation"
@@ -94,8 +94,8 @@ export default function UserAppointments() {
       <main className="flex-1 overflow-y-auto bg-gray-50 p-8">
         <header className="flex justify-between items-start mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-[#064e3b]">My Appointments</h2>
-            <p className="text-[#6b7280] mt-1">Manage and track all your wellness sessions.</p>
+            <h2 className="text-3xl font-bold text-[#064e3b]">Wellness Journey</h2>
+            <p className="text-[#6b7280] mt-1">Charting your path to holistic health and balance.</p>
           </div>
           <div className="flex items-center space-x-4">
             <button className="p-2.5 bg-white border border-gray-200 rounded-xl shadow-sm relative text-gray-600 hover:bg-gray-50 transition-all">
@@ -104,10 +104,99 @@ export default function UserAppointments() {
             </button>
             <button className="flex items-center space-x-2 bg-[#064e3b] hover:bg-opacity-90 text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg transition-all">
               <span className="material-symbols-outlined">add</span>
-              <span>Schedule New</span>
+              <span>Schedule New Step</span>
             </button>
           </div>
         </header>
+
+        {/* Journey Timeline Section */}
+        <section className="mb-10" data-purpose="journey-timeline">
+          <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 overflow-hidden relative">
+            <div className="flex justify-between items-center mb-10">
+              <h3 className="text-xl font-bold text-[#064e3b] flex items-center">
+                <span className="material-symbols-outlined mr-2">route</span>
+                Your Progress Map
+              </h3>
+              <div className="flex items-center space-x-4 text-sm font-medium">
+                <span className="flex items-center text-[#6b7280]">
+                  <span className="w-3 h-3 bg-gray-200 rounded-full mr-2"></span>Completed
+                </span>
+                <span className="flex items-center text-[#064e3b]">
+                  <span className="w-3 h-3 bg-[#064e3b] rounded-full mr-2"></span>Next Up
+                </span>
+                <span className="flex items-center text-[#10b981]">
+                  <span className="w-3 h-3 bg-[#10b981] rounded-full mr-2"></span>Upcoming
+                </span>
+              </div>
+            </div>
+            <div className="relative px-4">
+              <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-100 -translate-y-1/2 z-0"></div>
+              <div className="absolute top-1/2 left-0 w-[40%] h-1 bg-[#064e3b] -translate-y-1/2 z-0"></div>
+              <div className="relative z-10 flex justify-between items-center">
+                <div className="flex flex-col items-center group">
+                  <div className="w-12 h-12 rounded-full bg-[#ecf3f0] border-2 border-[#064e3b] flex items-center justify-center text-[#064e3b] mb-3 transition-transform group-hover:scale-110">
+                    <span className="material-symbols-outlined text-xl">check</span>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[10px] font-bold text-[#6b7280] uppercase">Oct 12</p>
+                    <p className="text-xs font-semibold text-[#1f2937]">Consultation</p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center group">
+                  <div className="w-12 h-12 rounded-full bg-[#ecf3f0] border-2 border-[#064e3b] flex items-center justify-center text-[#064e3b] mb-3 transition-transform group-hover:scale-110">
+                    <span className="material-symbols-outlined text-xl">check</span>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[10px] font-bold text-[#6b7280] uppercase">Oct 18</p>
+                    <p className="text-xs font-semibold text-[#1f2937]">Therapy Session</p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center scale-110 relative">
+                  <div className="absolute -top-12 bg-[#064e3b] text-white text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider whitespace-nowrap">
+                    You are here
+                  </div>
+                  <div className="w-14 h-14 rounded-full bg-[#064e3b] border-4 border-white shadow-xl flex items-center justify-center text-white mb-3 ring-2 ring-[#064e3b]/20">
+                    <span className="material-symbols-outlined">event</span>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[10px] font-bold text-[#064e3b] uppercase">Tomorrow</p>
+                    <p className="text-xs font-bold text-[#1f2937]">Major Milestone</p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center group">
+                  <div className="w-12 h-12 rounded-full bg-white border-2 border-[#10b981] flex items-center justify-center text-[#10b981] mb-3 transition-transform group-hover:scale-110">
+                    <span className="material-symbols-outlined text-xl">pending</span>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[10px] font-bold text-[#6b7280] uppercase">Oct 30</p>
+                    <p className="text-xs font-semibold text-[#1f2937]">Follow-up</p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center group">
+                  <div className="w-12 h-12 rounded-full bg-white border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 mb-3 transition-transform group-hover:scale-110">
+                    <span className="material-symbols-outlined text-xl">calendar_add_on</span>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[10px] font-bold text-[#6b7280] uppercase">Nov 05</p>
+                    <p className="text-xs font-semibold text-[#6b7280]">Diet Review</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-12 bg-[#ecf3f0]/50 p-4 rounded-2xl border border-[#064e3b]/5 flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-[#064e3b]/10 rounded-full flex items-center justify-center text-[#064e3b] mr-4">
+                  <span className="material-symbols-outlined">trending_up</span>
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-[#064e3b] tracking-tight">Treatment Completion: 68%</p>
+                  <p className="text-xs text-[#6b7280]">You have completed 4 out of 6 prescribed steps for this phase.</p>
+                </div>
+              </div>
+              <button className="text-[#064e3b] text-sm font-bold hover:underline">View Roadmap Details</button>
+            </div>
+          </div>
+        </section>
 
         <div className="grid grid-cols-12 gap-8 items-start">
           <section className="col-span-12 lg:col-span-7" data-purpose="upcoming-rich-cards">
@@ -192,7 +281,7 @@ export default function UserAppointments() {
             <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 h-full">
               <h3 className="text-xl font-bold text-[#064e3b] mb-6 flex items-center">
                 <span className="material-symbols-outlined mr-2">history</span>
-                Recent Sessions
+                Reflection &amp; History
               </h3>
               <div className="space-y-6">
                 <div className="flex items-center justify-between p-4 rounded-2xl border border-gray-50 hover:bg-[#ecf3f0]/30 transition-colors group">
