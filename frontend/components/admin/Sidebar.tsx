@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 interface SidebarProps {
   activePage?: string;
@@ -44,7 +45,7 @@ export default function Sidebar({ activePage = 'Dashboard' }: SidebarProps) {
         {navItems.map((item) => {
           const isActive = item.label === activePage;
           return (
-            <a key={item.label} href={item.href} style={{
+            <Link key={item.label} href={item.href} style={{
               display: 'flex', alignItems: 'center', gap: '12px',
               padding: '10px 12px', borderRadius: '10px', textDecoration: 'none',
               fontSize: '14px', fontWeight: isActive ? 600 : 400,
@@ -55,7 +56,7 @@ export default function Sidebar({ activePage = 'Dashboard' }: SidebarProps) {
             }}>
               <span className="material-symbols-outlined" style={{ fontSize: '22px' }}>{item.icon}</span>
               <span style={{ fontSize: '14px' }}>{item.label}</span>
-            </a>
+            </Link>
           );
         })}
       </nav>

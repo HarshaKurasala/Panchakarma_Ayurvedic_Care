@@ -30,6 +30,7 @@ import labReportsRoutes from "./routes/lab-reports.js";
 import paymentsRoutes from "./routes/payments.js";
 import authRoutes from "./routes/auth.js";
 import doctorsRoutes from "./routes/doctors.js";
+import adminRoutes from "./routes/admin.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -50,6 +51,7 @@ app.use("/api/appointments", appointmentsRoutes);
 app.use("/api/therapies", therapiesRoutes);
 app.use("/api/lab-reports", labReportsRoutes);
 app.use("/api/payments", paymentsRoutes);
+app.use("/api/admin", adminRoutes);
 
 /**
  * ENDPOINT: GET /
