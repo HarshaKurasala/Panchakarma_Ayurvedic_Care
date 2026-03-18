@@ -64,7 +64,7 @@ export default function BillingPage() {
           </a>
           <a
             className="flex items-center space-x-3 p-3 rounded-xl text-[#6b7280] hover:bg-[#ecf3f0] transition-colors"
-            href="#"
+            href="/user/settings"
           >
             <span className="material-symbols-outlined text-xl">settings</span>
             <span className="font-medium">Settings</span>

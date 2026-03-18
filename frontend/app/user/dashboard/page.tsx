@@ -50,7 +50,7 @@ export default function UserDashboard() {
             <span className="material-symbols-outlined">person</span>
             Profile
           </a>
-          <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/5 hover:text-primary transition-colors" href="#">
+          <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/5 hover:text-primary transition-colors" href="/user/settings">
             <span className="material-symbols-outlined">settings</span>
             Settings
           </a>
