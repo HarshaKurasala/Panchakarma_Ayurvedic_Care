@@ -46,7 +46,7 @@ export default function UserDashboard() {
             <span className="material-symbols-outlined">receipt_long</span>
             Billing
           </a>
-          <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/5 hover:text-primary transition-colors" href="#">
+          <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/5 hover:text-primary transition-colors" href="/user/profile">
             <span className="material-symbols-outlined">person</span>
             Profile
           </a>

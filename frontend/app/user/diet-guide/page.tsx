@@ -57,7 +57,7 @@ export default function DietGuidePage() {
           </a>
           <a
             className="flex items-center space-x-3 p-3 rounded-xl text-[#6b7280] hover:bg-[#ecf3f0] transition-colors"
-            href="#"
+            href="/user/profile"
           >
             <span className="material-symbols-outlined text-xl">person</span>
             <span className="font-medium">Profile</span>
