@@ -1,7 +1,7 @@
 // Admin Middleware - Validates that the authenticated user has admin role for accessing admin-only routes
 
 import type { Response, NextFunction } from "express";
-import { AuthRequest } from "./auth.js";
+import type { AuthRequest } from "./auth.js";
 
 // Check if authenticated user has admin role
 export const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
