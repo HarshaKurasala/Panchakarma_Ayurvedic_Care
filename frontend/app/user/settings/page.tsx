@@ -149,16 +149,6 @@ export default function SettingsPage() {
               Privacy
             </button>
             <button
-              onClick={() => setActiveTab('localization')}
-              className={`border-b-2 py-4 px-1 font-medium text-sm whitespace-nowrap transition-colors ${
-                activeTab === 'localization'
-                  ? 'border-[#064e3b] text-[#064e3b]'
-                  : 'border-transparent text-gray-500 hover:text-[#064e3b] hover:border-gray-200'
-              }`}
-            >
-              Localization
-            </button>
-            <button
               onClick={() => setActiveTab('theme')}
               className={`border-b-2 py-4 px-1 font-medium text-sm whitespace-nowrap transition-colors ${
                 activeTab === 'theme'
