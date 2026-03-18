@@ -31,7 +31,7 @@ export default function UserDashboard() {
             My Treatments
           </a>
           <div className="relative group">
-            <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/5 hover:text-primary transition-colors" href="#">
+            <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-primary/5 hover:text-primary transition-colors" href="/user/diet-guide">
               <span className="material-symbols-outlined">restaurant</span>
               <span className="flex-1">Diet Guide</span>
               <span className="material-symbols-outlined text-[16px] text-slate-300 dark:text-slate-600">info</span>

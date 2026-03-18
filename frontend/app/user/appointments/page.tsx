@@ -42,7 +42,7 @@ export default function UserAppointments() {
           </a>
           <a
             className="flex items-center justify-between p-3 rounded-xl text-[#6b7280] hover:bg-[#ecf3f0] transition-colors"
-            href="#"
+            href="/user/diet-guide"
           >
             <div className="flex items-center space-x-3">
               <span className="material-symbols-outlined text-xl">nutrition</span>
