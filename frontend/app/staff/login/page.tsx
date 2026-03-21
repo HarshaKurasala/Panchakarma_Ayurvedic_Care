@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function StaffLoginPage() {
+function StaffLoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
@@ -172,5 +172,13 @@ export default function StaffLoginPage() {
         </section>
       </main>
     </div>
+  );
+}
+
+export default function StaffLoginPage() {
+  return (
+    <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
+      <StaffLoginContent />
+    </Suspense>
   );
 }
