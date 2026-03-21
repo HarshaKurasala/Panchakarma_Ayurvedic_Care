@@ -84,10 +84,10 @@ export default function StaffDashboard() {
         </div>
         
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
-          <a className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#066046] text-white shadow-md shadow-[#066046]/20" href="#">
+          <Link className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#066046] text-white shadow-md shadow-[#066046]/20" href="/staff/dashboard">
             <span className="material-symbols-outlined text-[22px]">dashboard</span>
             <span className="text-sm font-medium">Dashboard</span>
-          </a>
+          </Link>
           <Link className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors" href="/staff/patients">
             <span className="material-symbols-outlined text-[22px]">person</span>
             <span className="text-sm font-medium">Patients</span>
