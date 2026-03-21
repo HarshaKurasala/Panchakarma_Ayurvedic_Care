@@ -31,6 +31,8 @@ import paymentsRoutes from "./routes/payments.js";
 import authRoutes from "./routes/auth.js";
 import doctorsRoutes from "./routes/doctors.js";
 import adminRoutes from "./routes/admin.js";
+import userRoutes from "./routes/user.js";
+import staffRoutes from "./routes/staff.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -44,6 +46,8 @@ app.use(cors());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/staff", staffRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/patients", patientsRoutes);
 app.use("/api/doctors", doctorsRoutes);

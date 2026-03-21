@@ -1,6 +1,74 @@
 "use client";
 
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { getDashboardOverview, getDailySchedule, getDoctors, getErrorMessage } from "@/lib/staffApi";
+
+interface DashboardData {
+  totalAppointmentsToday: number;
+  activeTherapySessions: number;
+  completedSessionsToday: number;
+  pendingAlerts: number;
+}
+
+interface Doctor {
+  id: number;
+  name: string;
+  specialization: string;
+  experience_years: number;
+  status: string;
+  scheduled_appointments: number;
+  availabilityStatus: string;
+  nextAvailableSlot: string;
+}
+
 export default function StaffDashboard() {
+  const [dashboard, setDashboard] = useState<DashboardData | null>(null);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Fetch dashboard overview
+        const dashboardRes = await getDashboardOverview();
+        if (dashboardRes.success) {
+          setDashboard(dashboardRes.data);
+        }
+
+        // Fetch doctors
+        const doctorsRes = await getDoctors();
+        if (doctorsRes.success) {
+          setDoctors(doctorsRes.data);
+        }
+      } catch (err) {
+        console.error('Error fetching dashboard data:', err);
+        setError(getErrorMessage(err));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const getStatusColor = (status: string) => {
+    switch(status.toLowerCase()) {
+      case 'available':
+        return 'bg-green-100 text-green-700';
+      case 'busy':
+        return 'bg-orange-100 text-orange-700';
+      case 'off_duty':
+        return 'bg-gray-100 text-gray-700';
+      default:
+        return 'bg-slate-100 text-slate-700';
+    }
+  };
+
   return (
     <div className="flex h-screen overflow-hidden bg-[#f5f8f7]">
       {/* Sidebar */}
@@ -20,30 +88,32 @@ export default function StaffDashboard() {
             <span className="material-symbols-outlined text-[22px]">dashboard</span>
             <span className="text-sm font-medium">Dashboard</span>
           </a>
-          <a className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors" href="#">
+          <Link className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors" href="/staff/patients">
             <span className="material-symbols-outlined text-[22px]">person</span>
             <span className="text-sm font-medium">Patients</span>
-          </a>
-          <a className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors" href="#">
+          </Link>
+          <Link className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors" href="/staff/appointments">
             <span className="material-symbols-outlined text-[22px]">calendar_today</span>
             <span className="text-sm font-medium">Appointments</span>
-          </a>
-          <a className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors" href="#">
+          </Link>
+          <Link
+            href="/staff/therapy-plan"
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors"
+          >
             <span className="material-symbols-outlined text-[22px]">description</span>
             <span className="text-sm font-medium">Therapy Plans</span>
-          </a>
-          <a className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors" href="#">
-            <span className="material-symbols-outlined text-[22px]">exercise</span>
+          </Link>
+          <Link
+            href="/staff/therapy-sessions"
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors"
+          >
+            <span className="material-symbols-outlined text-[22px]">spa</span>
             <span className="text-sm font-medium">Therapy Sessions</span>
-          </a>
-          <a className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors" href="#">
-            <span className="material-symbols-outlined text-[22px]">rate_review</span>
-            <span className="text-sm font-medium">Feedback</span>
-          </a>
-          <a className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors" href="#">
-            <span className="material-symbols-outlined text-[22px]">medical_services</span>
-            <span className="text-sm font-medium">Doctors</span>
-          </a>
+          </Link>
+          <Link className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors" href="/staff/doctors">
+            <span className="material-symbols-outlined text-[22px]">event_available</span>
+            <span className="text-sm font-medium">Doctor Availability</span>
+          </Link>
         </nav>
         
         <div className="p-4 border-t border-[#066046]/10">
@@ -73,10 +143,10 @@ export default function StaffDashboard() {
               <input className="pl-10 pr-4 py-2 bg-[#066046]/5 border border-[#066046]/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#066046] w-64" placeholder="Search patients, sessions..." type="text"/>
             </div>
             <div className="flex items-center gap-3">
-              <button className="relative w-10 h-10 rounded-lg bg-[#066046]/5 flex items-center justify-center text-[#066046] hover:bg-[#066046] hover:text-white transition-all">
+              <Link href="/staff/notifications" className="relative w-10 h-10 rounded-lg bg-[#066046]/5 flex items-center justify-center text-[#066046] hover:bg-[#066046] hover:text-white transition-all">
                 <span className="material-symbols-outlined">notifications</span>
                 <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-              </button>
+              </Link>
               <button className="w-10 h-10 rounded-lg bg-[#066046]/5 flex items-center justify-center text-[#066046] hover:bg-[#066046] hover:text-white transition-all">
                 <span className="material-symbols-outlined">settings</span>
               </button>
@@ -86,6 +156,12 @@ export default function StaffDashboard() {
 
         {/* Dashboard Content */}
         <div className="p-8 space-y-8">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+              {error}
+            </div>
+          )}
+
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white p-6 rounded-xl border border-[#066046]/10 shadow-sm">
@@ -93,10 +169,10 @@ export default function StaffDashboard() {
                 <div className="w-10 h-10 rounded-lg bg-[#066046]/10 flex items-center justify-center text-[#066046]">
                   <span className="material-symbols-outlined">groups</span>
                 </div>
-                <span className="text-green-600 text-sm font-bold bg-green-50 px-2 py-1 rounded">+12%</span>
+                <span className="text-green-600 text-sm font-bold bg-green-50 px-2 py-1 rounded">Live</span>
               </div>
-              <p className="text-slate-500 text-sm font-medium">Total Patients</p>
-              <h3 className="text-2xl font-bold mt-1">1,284</h3>
+              <p className="text-slate-500 text-sm font-medium">Today's Appointments</p>
+              <h3 className="text-2xl font-bold mt-1">{loading ? '-' : dashboard?.totalAppointmentsToday || 0}</h3>
             </div>
 
             <div className="bg-white p-6 rounded-xl border-2 border-[#066046]/30 shadow-lg relative overflow-hidden group">
@@ -105,17 +181,15 @@ export default function StaffDashboard() {
                   <span className="material-symbols-outlined">event_available</span>
                 </div>
                 <span className="flex items-center gap-1 text-[#066046] text-xs font-bold bg-[#066046]/10 px-2 py-1 rounded-full">
-                  <span className="w-2 h-2 rounded-full bg-[#066046]"></span> Live Status
+                  <span className="w-2 h-2 rounded-full bg-[#066046]"></span> Active
                 </span>
               </div>
-              <p className="text-slate-500 text-sm font-medium">Today&apos;s Appointments</p>
+              <p className="text-slate-500 text-sm font-medium">Active Therapy Sessions</p>
               <div className="flex items-center justify-between mt-2">
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-full border-2 border-[#066046] bg-[#066046]/5" style={{boxShadow: '0 0 0 4px rgba(6, 96, 70, 0.1), 0 0 15px rgba(6, 96, 70, 0.2)'}}>
-                  <h3 className="text-3xl font-black text-[#066046]">24</h3>
+                  <h3 className="text-3xl font-black text-[#066046]">{loading ? '-' : dashboard?.activeTherapySessions || 0}</h3>
                 </div>
-                <button className="px-3 py-1.5 rounded-full bg-orange-500 text-white text-[11px] font-black uppercase tracking-wider hover:bg-orange-600 transition-colors shadow-sm shadow-orange-200">
-                  6 Pending
-                </button>
+                <span className="text-xl font-bold text-[#066046]">{loading ? '-' : dashboard?.pendingAlerts || 0} Alerts</span>
               </div>
             </div>
 
@@ -124,10 +198,10 @@ export default function StaffDashboard() {
                 <div className="w-10 h-10 rounded-lg bg-[#066046]/10 flex items-center justify-center text-[#066046]">
                   <span className="material-symbols-outlined">clinical_notes</span>
                 </div>
-                <span className="text-red-600 text-sm font-bold bg-red-50 px-2 py-1 rounded">-2%</span>
+                <span className="text-green-600 text-sm font-bold bg-green-50 px-2 py-1 rounded">+8%</span>
               </div>
-              <p className="text-slate-500 text-sm font-medium">Active Therapy Plans</p>
-              <h3 className="text-2xl font-bold mt-1">86</h3>
+              <p className="text-slate-500 text-sm font-medium">Completed Sessions</p>
+              <h3 className="text-2xl font-bold mt-1">{loading ? '-' : dashboard?.completedSessionsToday || 0}</h3>
             </div>
 
             <div className="bg-white p-6 rounded-xl border border-[#066046]/10 shadow-sm">
@@ -135,10 +209,10 @@ export default function StaffDashboard() {
                 <div className="w-10 h-10 rounded-lg bg-[#066046]/10 flex items-center justify-center text-[#066046]">
                   <span className="material-symbols-outlined">task_alt</span>
                 </div>
-                <span className="text-green-600 text-sm font-bold bg-green-50 px-2 py-1 rounded">+18%</span>
+                <span className="text-orange-600 text-sm font-bold bg-orange-50 px-2 py-1 rounded">Pending</span>
               </div>
-              <p className="text-slate-500 text-sm font-medium">Completed Sessions</p>
-              <h3 className="text-2xl font-bold mt-1">312</h3>
+              <p className="text-slate-500 text-sm font-medium">Pending Actions</p>
+              <h3 className="text-2xl font-bold mt-1">{loading ? '-' : dashboard?.pendingAlerts || 0}</h3>
             </div>
           </div>
 
@@ -235,84 +309,50 @@ export default function StaffDashboard() {
           </div>
 
           {/* Bottom Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Patient Recovery Analytics */}
-            <div className="bg-white p-8 rounded-xl border border-[#066046]/10 shadow-sm">
-              <div className="mb-6">
-                <h4 className="text-lg font-bold">Patient Recovery Analytics</h4>
-                <div className="flex items-center gap-2 mt-1">
-                  <p className="text-3xl font-extrabold text-[#066046]">92%</p>
-                  <span className="text-sm text-slate-500">Recovery Rate</span>
-                  <span className="text-green-600 text-xs font-bold ml-2">↑ 2.1% last 6 months</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-6 gap-4 items-end h-64 px-4">
-                {[70, 85, 65, 90, 75, 95].map((height, index) => (
-                  <div key={index} className="flex flex-col gap-2 items-center">
-                    <div className="w-full bg-[#066046]/20 rounded-t-lg relative" style={{height: '140px'}}>
-                      <div className="absolute bottom-0 w-full bg-[#066046] rounded-t-lg" style={{height: `${height}%`}}></div>
-                    </div>
-                    <span className="text-xs font-bold text-slate-400">{['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'][index]}</span>
-                  </div>
-                ))}
-              </div>
+          <div className="bg-white rounded-xl border border-[#066046]/10 shadow-sm overflow-hidden">
+            <div className="p-6 border-b border-[#066046]/10 flex justify-between items-center">
+              <h4 className="text-lg font-bold">Doctor Availability</h4>
+              <Link href="/staff/doctors" className="text-sm text-[#066046] font-semibold flex items-center gap-1 hover:underline">
+                View All <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+              </Link>
             </div>
-
-            {/* Doctor Availability */}
-            <div className="bg-white rounded-xl border border-[#066046]/10 shadow-sm overflow-hidden flex flex-col">
-              <div className="p-6 border-b border-[#066046]/10 flex justify-between items-center">
-                <h4 className="text-lg font-bold">Doctor Availability</h4>
-                <button className="text-sm text-[#066046] font-semibold flex items-center gap-1 hover:underline">
-                  View Detailed Report <span className="material-symbols-outlined text-[18px]">chevron_right</span>
-                </button>
-              </div>
-              <div className="overflow-x-auto flex-1">
-                <table className="w-full text-left">
-                  <thead className="bg-[#066046]/5 text-slate-500 text-xs font-bold uppercase tracking-wider">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead className="bg-[#066046]/5 text-slate-500 text-xs font-bold uppercase tracking-wider">
+                  <tr>
+                    <th className="px-6 py-4">Doctor Name</th>
+                    <th className="px-6 py-4">Specialization</th>
+                    <th className="px-6 py-4 text-center">Appointments</th>
+                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4">Next Slot</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#066046]/5">
+                  {loading ? (
                     <tr>
-                      <th className="px-6 py-4">Doctor Name</th>
-                      <th className="px-6 py-4">Specialization</th>
-                      <th className="px-6 py-4 text-center">Load</th>
-                      <th className="px-6 py-4">Status</th>
+                      <td colSpan={5} className="px-6 py-4 text-center text-slate-500">Loading...</td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#066046]/5">
-                    <tr className="hover:bg-[#066046]/5 transition-colors">
-                      <td className="px-6 py-4 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-slate-200 bg-cover bg-center" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDp3lv-PEkFBR39mfLODwjkh1CgqgCxEtpUHbCvSge02cNjH4eXobN7GO3kYhC-C2NPD6OiYhNYXnX7VLpLeLKSkC4rSxvhRGkUMUN0akBvA-NBjHH5t6RyqN1Ht0ISyBLBe3Z_ANSkkVy0GDcVMwobHVo2uyGfyklKTpmJyz_cuId6sXmELWpmuN6nmFsJiu7_spUXlAml6hnXESss14R_oYvTH_C4Bo3hiR_nrAyW13w8r-Vg6Ih7aMYtQIIuk9Bf9LjdNuDoVVAL')"}}></div>
-                        <span className="font-medium text-sm">Dr. Rajesh Kumar</span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-slate-600">Ayurvedic Specialist</td>
-                      <td className="px-6 py-4 text-sm font-semibold text-center">12</td>
-                      <td className="px-6 py-4">
-                        <span className="px-2 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded uppercase">Available</span>
-                      </td>
+                  ) : doctors.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-4 text-center text-slate-500">No doctors found</td>
                     </tr>
-                    <tr className="hover:bg-[#066046]/5 transition-colors">
-                      <td className="px-6 py-4 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-slate-200 bg-cover bg-center" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuArWlFhadX_8Qb43LY_XDqNe4R2XvR67WkyPzD8nlg8bqfDxgwzTJA4bopVFmYUiyYtDwqeBdkqM7TTkrS6y1tnsUbGuexVrrZ24OiXrJwB612Atet0xoqJpecEBOEEEu0IubLqUXL5FoW1GYdh7xNe1_da6SoOACMi45buTp4wnuLu-wvnUYwHM-47OAAFJOhXUU0QsqXNNCCH3sBQfrKkUHgQ9irgFTSa5TWQcFt9b5OujyVoM2a2fLyVK1GdunFrBAE38zCZMV3O')"}}></div>
-                        <span className="font-medium text-sm">Dr. Meera Varma</span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-slate-600">Panchakarma Expert</td>
-                      <td className="px-6 py-4 text-sm font-semibold text-center">8</td>
-                      <td className="px-6 py-4">
-                        <span className="px-2 py-1 bg-orange-100 text-orange-700 text-[10px] font-bold rounded uppercase">Busy</span>
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-[#066046]/5 transition-colors">
-                      <td className="px-6 py-4 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-slate-200 bg-cover bg-center" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAJ0R5HuCALsb0Lj5RKEhP4QsXmZtlEteyN5-dvuiTAMQlBZJqrjjNqnX7pubY3Ou0NsY-No7pzmo3Y4gEytC9bjgtEx5pP0LRMsQqZbFxLMt2i2jXFCxNWT4sAQ95u6ftvuc9DsETNk3HGsSWFCwp0PcAmC9pmazHcqgBc9rcEu3kYFrZZngsb_KuoZOkftzciiUDTV2-iY3mGEQFO99An4SvkSUldbvQKRHYCH-ynjLl8_aGMTNbnS_NPG2bs_kl4Fty3Ao3xeerH')"}}></div>
-                        <span className="font-medium text-sm">Dr. Amit Shah</span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-slate-600">Internal Medicine</td>
-                      <td className="px-6 py-4 text-sm font-semibold text-center">10</td>
-                      <td className="px-6 py-4">
-                        <span className="px-2 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded uppercase">Available</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                  ) : (
+                    doctors.slice(0, 3).map((doctor) => (
+                      <tr key={doctor.id} className="hover:bg-[#066046]/5 transition-colors">
+                        <td className="px-6 py-4 font-medium text-sm">{doctor.name}</td>
+                        <td className="px-6 py-4 text-sm text-slate-600">{doctor.specialization}</td>
+                        <td className="px-6 py-4 text-sm font-semibold text-center">{doctor.scheduled_appointments}</td>
+                        <td className="px-6 py-4">
+                          <span className={`px-2 py-1 text-[10px] font-bold rounded uppercase ${getStatusColor(doctor.availabilityStatus)}`}>
+                            {doctor.availabilityStatus}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm">{doctor.nextAvailableSlot}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

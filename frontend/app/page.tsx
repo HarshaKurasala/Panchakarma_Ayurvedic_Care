@@ -1,6 +1,16 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+  
+  const handlePatientPortal = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push("/user/login");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
       <div className="container mx-auto px-4 py-16">
@@ -56,7 +66,7 @@ export default function Home() {
             </div>
           </Link>
 
-          <Link href="/user/dashboard" className="group">
+          <a href="#" onClick={handlePatientPortal} className="group cursor-pointer">
             <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow duration-300 border-t-4 border-purple-500">
               <div className="text-center">
                 <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -68,7 +78,7 @@ export default function Home() {
                 <p className="text-gray-600">Personal health records and appointments</p>
               </div>
             </div>
-          </Link>
+          </a>
         </div>
 
         <div className="text-center mt-16">
