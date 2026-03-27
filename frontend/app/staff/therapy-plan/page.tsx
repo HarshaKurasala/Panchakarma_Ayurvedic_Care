@@ -2,272 +2,361 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { use } from "react";
 
-interface TherapyDay {
+interface ProtocolCard {
   id: string;
-  day: number;
   title: string;
-  status: "Completed" | "In Progress" | "Scheduled";
-  date: string;
-  notes: string;
-  actions?: boolean;
+  patient: string;
+  duration: string;
+  status: "Active" | "Scheduled" | "Draft";
+  icon: string;
+  bgColor: string;
 }
 
-const therapyDays: TherapyDay[] = [
+const recentProtocols: ProtocolCard[] = [
   {
     id: "1",
-    day: 1,
-    title: "Snehanam (Oil Massage)",
-    status: "Completed",
-    date: "Oct 12",
-    notes: "Patient responded well to warm oil. No adverse skin reactions observed. Muscle tension visibly reduced post-session.",
+    title: "Detoxification Cycle",
+    patient: "Mrs. Kamala Das",
+    duration: "14 Days Program",
+    status: "Active",
+    icon: "spa",
+    bgColor: "bg-emerald-100 dark:bg-emerald-900/20",
   },
   {
     id: "2",
-    day: 2,
-    title: "Swedanam (Steam Therapy)",
-    status: "Completed",
-    date: "Oct 13",
-    notes: "Effective detoxification observed. Profuse sweating achieved within expected timeframe. Hydration maintained throughout.",
+    title: "Snehanam Routine",
+    patient: "Rahul Varma",
+    duration: "7 Days Program",
+    status: "Scheduled",
+    icon: "water_drop",
+    bgColor: "bg-orange-100 dark:bg-orange-900/20",
   },
   {
     id: "3",
-    day: 3,
-    title: "Vamana (Emesis Therapy)",
-    status: "In Progress",
-    date: "Today",
-    notes: "Current therapeutic procedure. Patient is resting in observation room. Vitals stable.",
-    actions: true,
-  },
-  {
-    id: "4",
-    day: 4,
-    title: "Basti (Enema Therapy)",
-    status: "Scheduled",
-    date: "Oct 15",
-    notes: "Ensure medicinal decoction is prepared 2 hours prior. Review dietary guidelines with patient.",
-  },
-  {
-    id: "5",
-    day: 5,
-    title: "Nasya (Nasal Administration)",
-    status: "Scheduled",
-    date: "Oct 16",
-    notes: "Post-Basti observation needed before proceeding. Check for any sinus congestion.",
+    title: "Meditation & Recovery",
+    patient: "Sarah Jensen",
+    duration: "21 Days Program",
+    status: "Draft",
+    icon: "self_improvement",
+    bgColor: "bg-teal-100 dark:bg-teal-900/20",
   },
 ];
 
-const getStatusStyles = (status: string) => {
-  switch (status) {
-    case "Completed":
-      return "bg-slate-100 text-slate-700";
-    case "In Progress":
-      return "bg-orange-100 text-orange-700";
-    case "Scheduled":
-      return "bg-slate-50 text-slate-600";
-    default:
-      return "bg-gray-100 text-gray-700";
-  }
-};
+export default function TherapyPlanPage() {
+  const [selectedIntensity, setSelectedIntensity] = useState("MODERATE");
+  const [formData, setFormData] = useState({
+    patient: "Aarav Sharma - PID-9923",
+    therapyType: "Snehanam (Oleation)",
+    duration: "7",
+    notes: "",
+  });
 
-const getStatusDotColor = (status: string) => {
-  switch (status) {
-    case "Completed":
-      return "bg-green-500";
-    case "In Progress":
-      return "bg-orange-500";
-    case "Scheduled":
-      return "bg-slate-400";
-    default:
-      return "bg-gray-500";
-  }
-};
-
-export default function TherapyPlan() {
   return (
-    <div className="flex h-screen overflow-hidden bg-[#f5f8f7]">
+    <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-[#066046]/10 flex flex-col h-full">
+      <aside className="w-64 border-r border-slate-200 dark:border-white/10 bg-white dark:bg-background-dark/50 flex flex-col shrink-0">
         <div className="p-6 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#066046] flex items-center justify-center text-white">
-            <span className="material-symbols-outlined">spa</span>
+          <div className="size-10 rounded-xl bg-primary flex items-center justify-center text-white">
+            <span className="material-symbols-outlined text-2xl">spa</span>
           </div>
           <div>
-            <h1 className="text-[#066046] font-bold text-lg leading-tight">Panchakarma</h1>
-            <p className="text-xs text-[#066046]/60 font-medium">Staff Portal</p>
+            <h1 className="text-primary font-bold text-lg leading-tight">Panchakarma</h1>
+            <p className="text-[10px] text-primary/60 font-bold uppercase tracking-widest">Specialists</p>
           </div>
         </div>
-
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
-          <Link
-            href="/staff/dashboard"
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors"
-          >
-            <span className="material-symbols-outlined text-[22px]">dashboard</span>
-            <span className="text-sm font-medium">Dashboard</span>
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors hover:text-primary" href="/staff/dashboard">
+            <span className="material-symbols-outlined">dashboard</span>
+            <span className="text-sm">Dashboard</span>
           </Link>
-          <Link
-            href="/staff/patients"
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors"
-          >
-            <span className="material-symbols-outlined text-[22px]">person</span>
-            <span className="text-sm font-medium">Patients</span>
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors hover:text-primary" href="/staff/appointments">
+            <span className="material-symbols-outlined">calendar_month</span>
+            <span className="text-sm">Appointments</span>
           </Link>
-          <Link
-            href="/staff/appointments"
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors"
-          >
-            <span className="material-symbols-outlined text-[22px]">calendar_today</span>
-            <span className="text-sm font-medium">Appointments</span>
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors hover:text-primary" href="/staff/patients">
+            <span className="material-symbols-outlined">group</span>
+            <span className="text-sm">Patients</span>
           </Link>
-          <Link
-            href="/staff/therapy-plan"
-            className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#066046] text-white shadow-md shadow-[#066046]/20"
-          >
-            <span className="material-symbols-outlined text-[22px]">description</span>
-            <span className="text-sm font-medium">Therapy Plans</span>
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg active-nav font-semibold" href="/staff/therapy-plan">
+            <span className="material-symbols-outlined">spa</span>
+            <span className="text-sm">Therapy Plans</span>
           </Link>
-          <Link
-            href="/staff/therapy-sessions"
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors"
-          >
-            <span className="material-symbols-outlined text-[22px]">spa</span>
-            <span className="text-sm font-medium">Therapy Sessions</span>
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors hover:text-primary" href="/staff/therapy-sessions">
+            <span className="material-symbols-outlined">medical_services</span>
+            <span className="text-sm">Therapy Sessions</span>
           </Link>
-          <Link className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-[#066046]/5 hover:text-[#066046] transition-colors" href="/staff/doctors">
-            <span className="material-symbols-outlined text-[22px]">event_available</span>
-            <span className="text-sm font-medium">Doctor Availability</span>
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors hover:text-primary" href="/staff/doctors">
+            <span className="material-symbols-outlined">person_in_circle</span>
+            <span className="text-sm">Doctors</span>
           </Link>
         </nav>
-
-        <div className="p-4 border-t border-[#066046]/10">
-          <div className="flex items-center gap-3 px-2 py-2">
-            <div
-              className="w-10 h-10 rounded-full bg-cover bg-center border border-[#066046]/20"
-              style={{
-                backgroundImage:
-                  "url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0apnuuA-ZcDEnNEit2QGz1ud6kNtCDdHeuit0jLEjluBV5SYiG08-u7VhCdKI6aQb5tu61qIM6LoK54xz2uPT2TavKc706JvcoTEV3lOOkfwqVTz0GY9Lq-rsfIftEmuI3TYG3DX6bqghq4Z4Ab97flo62kE7aOq6AP80qszLBYZdNvH6wntx_6aEz13XdEicxt6OXScbAw_0afTex_p6eQTAr3hJQyt_Bpj_mXLWtZouECifZQ4dl3FV7G862Ac6R9-OFkDgFwJq')",
-              }}
-            ></div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold truncate">Dr. Ananya Rao</p>
-              <p className="text-xs text-[#066046]/60 truncate">Senior Therapist</p>
+        <div className="p-4 border-t border-slate-100 dark:border-white/5 space-y-3">
+          <div className="flex items-center gap-3 p-2 rounded-xl bg-slate-50 dark:bg-white/5">
+            <img alt="Staff Member" className="size-10 rounded-full object-cover border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3vX78aJ5gEZL9k4oRHLVEGbnEVOdLV7QnGsZTVIjanIGJJ2CARtjxu5RL-hDQLPSoemlBbjKNFrWRevvSVzb72mKxN9L0QvUYW6sEQU7HCOlK3YNGCZXCyaTr0AWWw3NGE0dmVwqsCkmWkp22hMQEUGWLdkELKtZrIliTL6unH38OWGdaypdvU965IfpFo3KDUG2KTB8ab_Zs0UcjpEYepnfuRWdIQE8hVdkXbRmiYokTXNJVYpgXLueNK25HkzNMbvV1bAH6tFEm" />
+            <div className="flex flex-col overflow-hidden">
+              <p className="text-xs font-bold truncate">Revati Singh</p>
+              <p className="text-[10px] text-slate-500 font-medium">Therapy Coordinator</p>
             </div>
-            <button className="text-slate-400 hover:text-[#066046]">
-              <span className="material-symbols-outlined text-[20px]">logout</span>
-            </button>
           </div>
+          <button className="w-full bg-primary text-white py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-md shadow-primary/10">
+            <span className="material-symbols-outlined text-lg">add</span>
+            New Plan
+          </button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-y-auto">
-        {/* Header */}
-        <header className="sticky top-0 z-40 h-16 border-b border-[#066046]/10 bg-white flex items-center justify-between px-8 flex-shrink-0 shadow-sm">
-          <div className="flex items-center gap-4">
-            <h2 className="text-xl font-bold text-[#066046]">Therapy Plan</h2>
+      <main className="flex-1 flex flex-col overflow-hidden">
+        {/* Top Navigation Bar */}
+        <header className="sticky top-0 z-40 border-b border-slate-200 dark:border-white/10 bg-white dark:bg-background-dark/50 flex items-center justify-between h-20 px-8 shrink-0">
+          <div className="flex items-center gap-8 flex-1">
+            <h1 className="font-bold text-xl tracking-tight text-primary">Panchakarma Management</h1>
+            <nav className="flex gap-8">
+              <Link className="font-semibold uppercase tracking-wider text-primary border-b-2 border-primary pb-1 text-sm" href="/staff/therapy-plan">
+                Create Plan
+              </Link>
+              <Link className="font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 hover:text-primary transition-colors text-sm" href="#">
+                Session Monitoring
+              </Link>
+            </nav>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="relative w-96 hidden md:block">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
-              <input className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#066046]/20" placeholder="Search patients..." type="text" />
+          <div className="flex items-center gap-6">
+            <div className="relative flex items-center">
+              <span className="material-symbols-outlined absolute left-3 text-slate-400" style={{ fontSize: "20px" }}>search</span>
+              <input className="pl-10 pr-4 py-2 bg-slate-100 dark:bg-white/5 border-none rounded-full text-sm focus:ring-2 focus:ring-primary/20 w-64" placeholder="Search records..." type="text" />
             </div>
-            <img alt="User Avatar" className="w-10 h-10 rounded-full border-2 border-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDhOWOksULSNAkyvAOumHmW-OlsvKVNekzaS9P29Wtr5B7p5qoarvyHZaS6dh8PYHRAagn90_UBoZY8VkFQSIjG5OUi40fsGF7-JvkrhtHDiNJBN9hEO6SxivSGKNG65_pRhor86I8CNDdhRW5Fgx48YBetbsIw63LRMGRhxcP-rbg2HFt3oY9CyWn388u06klpHw7z47JgK5vj-Fi0l0cM_ROKj4IUK2Am-sPWj9q5NDYMNPslmsh5QYgNRts4ChF-nZzArpyxuqS" />
+            <button className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+              <span className="material-symbols-outlined" style={{ fontSize: "24px" }}>notifications</span>
+            </button>
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-200 border-2 border-primary">
+              <img className="w-full h-full object-cover" alt="Doctor Avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXTvZPtX4HpqRxnvcjUdJ-WyTZeMzWUt0KhQl1HXLAQqL_LojTKzL6IOywG7i3rEWVmFJRu9YRpmKT1aUjTVaqG_rzOaC1TPrew9kldq0AkP2mX_uGb4F3EYHASj2rWnLmzV8HJRLc3o9gh61PlKsQrrH_irYfTz3etOL2L2FKyGhM7vAtAsNXNZuY-2ZF6aRuLcTjyQK4Gxi2Pak7ypsv3X_ywYSawRrBumTeJ9dY_GSFMH5XBXd1HwS9x4e55bEAzYT4599IEeD1" />
+            </div>
           </div>
         </header>
 
-        {/* Body Canvas */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-8 space-y-8 max-w-5xl mx-auto w-full">
-            {/* Patient Header Info */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-200">
-              <div>
-                <h1 className="text-3xl font-extrabold text-[#066046] tracking-tight mb-2">Arjun Mehta</h1>
-                <div className="flex items-center gap-3 text-sm font-medium text-slate-600">
-                  <span className="bg-[#066046]/10 text-[#066046] px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold">Panchakarma Flow</span>
-                  <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[18px]">calendar_month</span> Oct 12 - Oct 16
-                  </span>
+        {/* Main Content Scroll Area */}
+        <div className="flex-1 overflow-y-auto p-12 bg-background-light dark:bg-background-dark/95">
+          <div className="max-w-6xl mx-auto">
+            {/* Hero Header Section */}
+            <section className="mb-12 flex justify-between items-end">
+              <div className="max-w-2xl">
+                <span className="text-secondary font-bold tracking-widest text-xs uppercase mb-2 block">Clinical Excellence</span>
+                <h2 className="text-5xl font-bold text-primary leading-tight -tracking-widest">
+                  New Therapy <span className="text-emerald-600 dark:text-emerald-400">Protocol.</span>
+                </h2>
+                <p className="mt-4 text-slate-600 dark:text-slate-400 font-medium leading-relaxed text-lg">
+                  Design a bespoke Ayurvedic journey by balancing doshas through traditional Prakriti analysis and modern monitoring techniques.
+                </p>
+              </div>
+              <div className="hidden lg:block">
+                <div className="flex gap-2">
+                  <div className="px-4 py-2 bg-emerald-100 dark:bg-emerald-900/20 rounded-full flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+                    <span className="text-primary font-semibold text-xs uppercase tracking-tighter">Live Session Count: 14</span>
+                  </div>
                 </div>
               </div>
-              <button className="bg-gradient-to-r from-[#066046] to-[#055239] text-white px-6 py-2.5 rounded-lg font-medium text-sm shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined text-[20px]">edit</span>
-                Modify Plan
-              </button>
-            </div>
+            </section>
 
-            {/* Timeline */}
-            <div className="relative pl-4 md:pl-8 space-y-6 before:absolute before:inset-0 before:ml-4 md:before:ml-8 before:-translate-x-px before:w-0.5 before:bg-slate-300 before:rounded-full before:h-full pb-8">
-              {therapyDays.map((day, index) => (
-                <div key={day.id} className={`relative pl-8 md:pl-12 group ${day.status === "Scheduled" && index > 2 ? "opacity-75 hover:opacity-100 transition-opacity" : ""}`}>
-                  {/* Timeline Node */}
-                  <div
-                    className={`absolute left-[-11px] md:left-[-11px] top-4 z-10 flex items-center justify-center shadow-[0_0_0_4px_#f5f8f7] transition-all ${
-                      day.status === "Completed"
-                        ? "size-6 rounded-full bg-white border-2 border-green-500"
-                        : day.status === "In Progress"
-                          ? "size-7 rounded-full bg-[#066046] border-4 border-white"
-                          : "size-5 rounded-full bg-slate-200 border-2 border-slate-300"
-                    }`}
-                  >
-                    {day.status === "Completed" && (
-                      <span className="material-symbols-outlined text-[14px] text-green-500">check</span>
-                    )}
-                    {day.status === "In Progress" && (
-                      <span className="material-symbols-outlined text-[14px] text-white animate-spin">sync</span>
-                    )}
-                  </div>
-
-                  {/* Card */}
-                  <div
-                    className={`rounded-2xl p-6 border transition-all ${
-                      day.status === "Completed"
-                        ? "bg-white border-slate-200 shadow-sm hover:shadow-md"
-                        : day.status === "In Progress"
-                          ? "bg-white border-2 border-[#066046]/20 shadow-md hover:shadow-lg relative overflow-hidden before:absolute before:top-0 before:left-0 before:w-full before:h-1 before:bg-gradient-to-r before:from-[#066046] before:to-[#055239]"
-                          : "bg-slate-50/60 border-slate-200 border-dashed"
-                    }`}
-                  >
-                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
-                      <div>
-                        <h3 className="font-bold text-lg text-slate-900 mb-1">
-                          Day {day.day}: {day.title}
-                        </h3>
-                        <div
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-xs font-bold ${getStatusStyles(day.status)}`}
-                        >
-                          <span className={`size-2 rounded-full ${getStatusDotColor(day.status)}`}></span>
-                          {day.status}
+            {/* Main Form Grid */}
+            <div className="grid grid-cols-12 gap-8">
+              {/* Left Column: Form Details */}
+              <div className="col-span-12 lg:col-span-8 space-y-8">
+                <div className="bg-white dark:bg-white/5 p-10 rounded-xl shadow-sm border border-slate-200 dark:border-white/10">
+                  <form className="space-y-10">
+                    {/* Patient Selection */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-2">
+                        <label className="block text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-300">Select Patient</label>
+                        <div className="relative group">
+                          <select 
+                            value={formData.patient} 
+                            onChange={(e) => setFormData({...formData, patient: e.target.value})}
+                            className="w-full bg-slate-100 dark:bg-white/5 border-none rounded py-4 px-4 appearance-none text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-primary/20"
+                          >
+                            <option>Aarav Sharma - PID-9923</option>
+                            <option>Meera Iyer - PID-4451</option>
+                            <option>Vikram Seth - PID-1029</option>
+                          </select>
+                          <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400" style={{ fontSize: "20px" }}>unfold_more</span>
                         </div>
                       </div>
-                      <span className={`text-sm font-medium flex items-center gap-1 ${day.status === "In Progress" ? "text-[#066046] font-bold" : "text-slate-600"}`}>
-                        <span className="material-symbols-outlined text-[16px]">schedule</span> {day.date}
-                      </span>
+                      <div className="space-y-2">
+                        <label className="block text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-300">Therapy Type</label>
+                        <div className="relative group">
+                          <select 
+                            value={formData.therapyType}
+                            onChange={(e) => setFormData({...formData, therapyType: e.target.value})}
+                            className="w-full bg-slate-100 dark:bg-white/5 border-none rounded py-4 px-4 appearance-none text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-primary/20"
+                          >
+                            <option>Snehanam (Oleation)</option>
+                            <option>Swedanam (Sudation)</option>
+                            <option>Vamana (Emesis)</option>
+                            <option>Virechana (Purgation)</option>
+                            <option>Basti (Enema)</option>
+                          </select>
+                          <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400" style={{ fontSize: "20px" }}>spa</span>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className={`p-4 rounded-xl border ${day.status === "Scheduled" ? "bg-slate-50/50 border-slate-200" : "bg-slate-50 border-slate-200"}`}>
-                      <h4 className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                        <span className="material-symbols-outlined text-[16px]">description</span>
-                        {day.status === "Scheduled" ? "Preparation Required" : "Clinical Notes"}
-                      </h4>
-                      <p className={`text-sm leading-relaxed ${day.status === "In Progress" ? "font-medium text-slate-900" : day.status === "Scheduled" ? "text-slate-600" : "text-slate-700"}`}>
-                        {day.notes}
-                      </p>
-                      {day.actions && (
-                        <div className="mt-4 flex gap-3">
-                          <button className="bg-white border border-slate-200 text-slate-700 px-4 py-1.5 rounded-md text-xs font-bold hover:bg-slate-50 transition-colors">
-                            Update Status
-                          </button>
-                          <button className="bg-white border border-slate-200 text-slate-700 px-4 py-1.5 rounded-md text-xs font-bold hover:bg-slate-50 transition-colors">
-                            Add Note
-                          </button>
+                    {/* Duration & Intensity */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                      <div className="space-y-2">
+                        <label className="block text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-300">Duration (Days)</label>
+                        <input 
+                          type="number" 
+                          value={formData.duration}
+                          onChange={(e) => setFormData({...formData, duration: e.target.value})}
+                          className="w-full bg-slate-100 dark:bg-white/5 border-none rounded py-4 px-4 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-primary/20" 
+                          placeholder="7" 
+                        />
+                      </div>
+                      <div className="space-y-2 md:col-span-2">
+                        <label className="block text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-300">Intensity Level</label>
+                        <div className="flex items-center gap-4 py-3">
+                          {["MILD", "MODERATE", "INTENSE"].map((level) => (
+                            <button
+                              key={level}
+                              onClick={() => setSelectedIntensity(level)}
+                              type="button"
+                              className={`flex-1 py-2 rounded-full text-xs font-bold transition-all ${
+                                selectedIntensity === level
+                                  ? "bg-primary text-white"
+                                  : "border border-slate-300 dark:border-white/20 text-slate-700 dark:text-slate-300 hover:bg-primary hover:text-white"
+                              }`}
+                            >
+                              {level}
+                            </button>
+                          ))}
                         </div>
-                      )}
+                      </div>
+                    </div>
+
+                    {/* Clinical Notes */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-700 dark:text-slate-300">Clinical Notes & Observations</label>
+                      <textarea 
+                        value={formData.notes}
+                        onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                        className="w-full bg-slate-100 dark:bg-white/5 border-none rounded py-4 px-4 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-primary/20 resize-none" 
+                        placeholder="Document specific herbal oil requirements, dietary restrictions, and patient sensitivity notes here..." 
+                        rows={6}
+                      ></textarea>
+                    </div>
+
+                    {/* Form Action */}
+                    <div className="pt-6 border-t border-slate-200 dark:border-white/10">
+                      <button 
+                        type="button"
+                        className="w-full py-5 rounded-xl bg-gradient-to-r from-primary to-emerald-700 text-white font-bold text-lg tracking-wide shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 transition-all active:scale-95 flex items-center justify-center gap-3"
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: "24px", fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
+                        Generate Therapy Schedule
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              {/* Right Column: Contextual Info & Stats */}
+              <div className="col-span-12 lg:col-span-4 space-y-8">
+                {/* Patient Summary Card */}
+                <div className="bg-primary text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-10">
+                    <span className="material-symbols-outlined" style={{ fontSize: "128px" }}>person</span>
+                  </div>
+                  <h3 className="font-bold text-xl mb-4 relative z-10">Patient Profile</h3>
+                  <div className="space-y-4 relative z-10">
+                    <div className="flex justify-between items-center pb-2 border-b border-white/10">
+                      <span className="text-emerald-100 text-sm font-medium">Primary Dosha</span>
+                      <span className="bg-orange-500 px-3 py-1 rounded-full text-[10px] font-extrabold text-white uppercase tracking-widest">Pitta</span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-white/10">
+                      <span className="text-emerald-100 text-sm font-medium">Last Session</span>
+                      <span className="text-white text-sm font-bold">Oct 24, 2023</span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-white/10">
+                      <span className="text-emerald-100 text-sm font-medium">Medical Flag</span>
+                      <span className="text-emerald-200 text-sm font-bold">Hypertension</span>
                     </div>
                   </div>
+                  <div className="mt-8 pt-4 flex gap-4">
+                    <button className="flex-1 py-2 bg-white/10 rounded text-xs font-bold uppercase tracking-wider hover:bg-white/20 transition-colors">Full History</button>
+                  </div>
                 </div>
-              ))}
+
+                {/* Guidelines Card */}
+                <div className="bg-slate-50 dark:bg-white/5 p-8 rounded-xl border border-slate-200 dark:border-white/10">
+                  <div className="flex items-center gap-3 mb-6">
+                    <span className="material-symbols-outlined text-primary" style={{ fontSize: "24px" }}>menu_book</span>
+                    <h3 className="font-bold text-primary">Protocol Guidelines</h3>
+                  </div>
+                  <ul className="space-y-4">
+                    <li className="flex gap-3 text-sm text-slate-600 dark:text-slate-400 font-medium leading-tight">
+                      <span className="material-symbols-outlined text-primary text-base" style={{ fontSize: "20px" }}>check_circle</span>
+                      Ensure Swedanam follows Snehanam for optimal toxins release.
+                    </li>
+                    <li className="flex gap-3 text-sm text-slate-600 dark:text-slate-400 font-medium leading-tight">
+                      <span className="material-symbols-outlined text-primary text-base" style={{ fontSize: "20px" }}>check_circle</span>
+                      Monitor Pitta levels daily during Vamana cycles.
+                    </li>
+                    <li className="flex gap-3 text-sm text-slate-600 dark:text-slate-400 font-medium leading-tight">
+                      <span className="material-symbols-outlined text-primary text-base" style={{ fontSize: "20px" }}>check_circle</span>
+                      Avoid heavy meals 4 hours prior to therapy initiation.
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Facility Availability Visualization */}
+                <div className="bg-white dark:bg-white/5 p-8 rounded-xl border border-slate-200 dark:border-white/10 flex flex-col items-center text-center">
+                  <div className="relative w-32 h-32 mb-6">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 128 128">
+                      <circle cx="64" cy="64" r="58" fill="transparent" stroke="currentColor" strokeWidth="8" className="text-slate-200 dark:text-slate-700" />
+                      <circle cx="64" cy="64" r="58" fill="transparent" stroke="currentColor" strokeWidth="8" strokeDasharray="364" strokeDashoffset="100" className="text-emerald-500" />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-2xl font-bold text-primary">72%</span>
+                      <span className="text-[8px] uppercase font-extrabold text-slate-500 tracking-widest">Plan Capacity</span>
+                    </div>
+                  </div>
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-2">Facility Availability</h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 px-4">The treatment wings are currently at 72% occupancy for the requested dates.</p>
+                </div>
+              </div>
             </div>
+
+            {/* Recently Created Grid */}
+            <section className="mt-20">
+              <div className="flex justify-between items-center mb-10">
+                <h3 className="text-3xl font-bold text-primary tracking-tight">
+                  Recent <span className="text-secondary">Protocols</span>
+                </h3>
+                <button className="text-primary font-bold text-sm flex items-center gap-2 hover:underline">
+                  View All Plans <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>arrow_forward</span>
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {recentProtocols.map((protocol) => (
+                  <div key={protocol.id} className="bg-white dark:bg-white/5 p-6 rounded-xl border border-slate-200 dark:border-white/10 hover:shadow-xl hover:shadow-primary/5 transition-all group">
+                    <div className="flex justify-between items-start mb-6">
+                      <div className={`w-12 h-12 rounded-lg ${protocol.bgColor} flex items-center justify-center text-primary group-hover:scale-110 transition-transform`}>
+                        <span className="material-symbols-outlined" style={{ fontSize: "24px", fontVariationSettings: "'FILL' 1" }}>{protocol.icon}</span>
+                      </div>
+                      <span className="bg-slate-100 dark:bg-white/10 px-3 py-1 rounded text-[10px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest">{protocol.status}</span>
+                    </div>
+                    <h4 className="font-bold text-slate-900 dark:text-white text-lg mb-1">{protocol.title}</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">Patient: {protocol.patient}</p>
+                    <div className="flex items-center gap-2 text-xs font-bold text-primary">
+                      <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>calendar_month</span>
+                      {protocol.duration}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
         </div>
       </main>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface Stats {
   todays_appointments: number;
@@ -126,44 +127,31 @@ export default function DoctorDashboard() {
           </div>
         </div>
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
-          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg active-nav font-semibold" href="#">
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg active-nav font-semibold" href="/doctor/dashboard">
             <span className="material-symbols-outlined">dashboard</span>
             <span className="text-sm">Dashboard</span>
-          </a>
-          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" href="#">
+          </Link>
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors hover:text-primary" href="/doctor/appointments">
             <span className="material-symbols-outlined">calendar_month</span>
             <span className="text-sm">Appointments</span>
-          </a>
-          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" href="#">
+          </Link>
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors hover:text-primary" href="/doctor/patients">
             <span className="material-symbols-outlined">group</span>
             <span className="text-sm">Patients</span>
-          </a>
-          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" href="#">
+          </Link>
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors hover:text-primary" href="/doctor/therapies">
             <span className="material-symbols-outlined">medical_services</span>
             <span className="text-sm">Therapies</span>
-          </a>
-          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" href="#">
+          </Link>
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors hover:text-primary" href="/doctor/inventory">
             <span className="material-symbols-outlined">inventory_2</span>
             <span className="text-sm">Inventory</span>
-          </a>
-          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" href="#">
+          </Link>
+          <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors hover:text-primary" href="/doctor/analytics">
             <span className="material-symbols-outlined">bar_chart</span>
             <span className="text-sm">Analytics</span>
-          </a>
+          </Link>
         </nav>
-        <div className="p-4 border-t border-slate-100 dark:border-white/5 space-y-3">
-          <div className="flex items-center gap-3 p-2 rounded-xl bg-slate-50 dark:bg-white/5">
-            <img alt="Dr. Ayush Sharma" className="size-10 rounded-full object-cover border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3vX78aJ5gEZL9k4oRHLVEGbnEVOdLV7QnGsZTVIjanIGJJ2CARtjxu5RL-hDQLPSoemlBbjKNFrWRevvSVzb72mKxN9L0QvUYW6sEQU7HCOlK3YNGCZXCyaTr0AWWw3NGE0dmVwqsCkmWkp22hMQEUGWLdkELKtZrIliTL6unH38OWGdaypdvU965IfpFo3KDUG2KTB8ab_Zs0UcjpEYepnfuRWdIQE8hVdkXbRmiYokTXNJVYpgXLueNK25HkzNMbvV1bAH6tFEm" />
-            <div className="flex flex-col overflow-hidden">
-              <p className="text-xs font-bold truncate">Dr. Ayush Sharma</p>
-              <p className="text-[10px] text-slate-500 font-medium">Sr. BAMS Consultant</p>
-            </div>
-          </div>
-          <button className="w-full bg-primary text-white py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-md shadow-primary/10">
-            <span className="material-symbols-outlined text-lg">add</span>
-            New Consultation
-          </button>
-        </div>
       </aside>
 
       {/* Main Content */}
