@@ -19,6 +19,24 @@ interface Doctor {
   availability: string;
 }
 
+interface TherapyPlan {
+  id: number;
+  status: string;
+  start_date: string;
+  end_date: string;
+  doctor_name: string;
+  therapy_type: string;
+}
+
+interface Appointment {
+  id: number;
+  appointment_date: string;
+  appointment_time: string;
+  therapy_name: string;
+  doctor_name: string;
+  status: string;
+}
+
 export default function UserAppointments() {
   const router = useRouter();
   const [showBooking, setShowBooking] = useState(false);
@@ -33,6 +51,10 @@ export default function UserAppointments() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [fetchLoading, setFetchLoading] = useState(false);
+  const [therapyPlans, setTherapyPlans] = useState<TherapyPlan[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [hasActiveTherapyPlan, setHasActiveTherapyPlan] = useState(false);
+  const [initialLoadingComplete, setInitialLoadingComplete] = useState(false);
 
   const getTomorrowDate = () => {
     const date = new Date();
@@ -42,6 +64,52 @@ export default function UserAppointments() {
 
   const minDate = getTomorrowDate();
 
+  // Fetch therapy plans and appointments on component mount
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        
+        // Fetch therapy plans
+        const plansRes = await fetch('http://localhost:5000/api/user/therapy-plans', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (plansRes.ok) {
+          const plansData = await plansRes.json();
+          const plans = Array.isArray(plansData.data) ? plansData.data : plansData;
+          setTherapyPlans(plans);
+          
+          // Check if there's an active therapy plan
+          const hasActive = plans.some((plan: TherapyPlan) => plan.status === 'active');
+          setHasActiveTherapyPlan(hasActive);
+        }
+
+        // Fetch appointments
+        const appointmentsRes = await fetch('http://localhost:5000/api/user/appointments', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (appointmentsRes.ok) {
+          const appointmentsData = await appointmentsRes.json();
+          const appts = Array.isArray(appointmentsData.data) ? appointmentsData.data : appointmentsData;
+          setAppointments(appts);
+        }
+      } catch (err) {
+        console.error('Error fetching initial data:', err);
+      } finally {
+        setInitialLoadingComplete(true);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
+  // Fetch therapies and doctors when booking modal is opened
   useEffect(() => {
     if (showBooking) {
       const fetchData = async () => {
@@ -131,7 +199,33 @@ export default function UserAppointments() {
       }
 
       setSuccess('✓ Appointment booked successfully!');
-      setTimeout(() => {
+      setTimeout(async () => {
+        // Refresh therapy plans and appointments
+        try {
+          const token = localStorage.getItem('authToken');
+          const plansRes = await fetch('http://localhost:5000/api/user/therapy-plans', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (plansRes.ok) {
+            const plansData = await plansRes.json();
+            const plans = Array.isArray(plansData.data) ? plansData.data : plansData;
+            setTherapyPlans(plans);
+            const hasActive = plans.some((plan: TherapyPlan) => plan.status === 'active');
+            setHasActiveTherapyPlan(hasActive);
+          }
+          
+          const appointmentsRes = await fetch('http://localhost:5000/api/user/appointments', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (appointmentsRes.ok) {
+            const appointmentsData = await appointmentsRes.json();
+            const appts = Array.isArray(appointmentsData.data) ? appointmentsData.data : appointmentsData;
+            setAppointments(appts);
+          }
+        } catch (err) {
+          console.error('Error refreshing data:', err);
+        }
+        
         setShowBooking(false);
         setStep(1);
         setSelectedTherapy(null);
@@ -211,19 +305,26 @@ export default function UserAppointments() {
       <main className="flex-1 overflow-y-auto bg-gray-50 p-8">
         <header className="flex justify-between items-start mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-[#064e3b]">Wellness Journey</h2>
-            <p className="text-[#6b7280] mt-1">Charting your path to holistic health and balance.</p>
+            <h2 className="text-3xl font-bold text-[#064e3b]">
+              {hasActiveTherapyPlan ? 'My Treatment Schedule' : 'Book Your Consultation'}
+            </h2>
+            <p className="text-[#6b7280] mt-1">
+              {hasActiveTherapyPlan 
+                ? 'Track your therapy sessions and appointments with our wellness team.'
+                : 'Schedule your first appointment with our Ayurvedic specialists today.'}
+            </p>
           </div>
           <div className="flex items-center space-x-4">
             <button className="p-2.5 bg-white border border-gray-200 rounded-xl shadow-sm relative text-gray-600 hover:bg-gray-50 transition-all">
               <span className="material-symbols-outlined">notifications</span>
               <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
-            <button
-              onClick={() => {
-                setShowBooking(true);
-                setStep(1);
-                setSelectedTherapy(null);
+            {!hasActiveTherapyPlan && (
+              <button
+                onClick={() => {
+                  setShowBooking(true);
+                  setStep(1);
+                  setSelectedTherapy(null);
                 setSelectedDoctor(null);
                 setAppointmentDate('');
                 setAppointmentTime('');
@@ -234,10 +335,71 @@ export default function UserAppointments() {
               <span className="material-symbols-outlined">add</span>
               <span>Book Session</span>
             </button>
+            )}
           </div>
         </header>
 
-        {/* Progress Map Timeline */}
+        {/* Show Booking Prompt if No Active Therapy Plan */}
+        {!initialLoadingComplete ? (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#064e3b]"></div>
+            <p className="mt-4 text-[#6b7280] font-medium">Loading your appointments...</p>
+          </div>
+        ) : !hasActiveTherapyPlan ? (
+          <section className="mb-10">
+            <div className="bg-gradient-to-br from-[#064e3b] to-[#003527] rounded-3xl p-12 shadow-lg text-white">
+              <div className="text-center mb-12">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="material-symbols-outlined text-4xl">local_hospital</span>
+                </div>
+                <h3 className="text-3xl font-bold mb-2">Begin Your Wellness Journey</h3>
+                <p className="text-white/80 text-lg">Schedule a consultation with our Ayurvedic specialists to create your personalized therapy plan.</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm border border-white/20">
+                  <div className="w-12 h-12 bg-[#10b981] rounded-lg flex items-center justify-center mb-4">
+                    <span className="material-symbols-outlined text-xl">calendar_month</span>
+                  </div>
+                  <h4 className="font-bold text-lg mb-2">Easy Scheduling</h4>
+                  <p className="text-white/70 text-sm">Choose your preferred date and time with our available specialists.</p>
+                </div>
+                <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm border border-white/20">
+                  <div className="w-12 h-12 bg-[#f59e0b] rounded-lg flex items-center justify-center mb-4">
+                    <span className="material-symbols-outlined text-xl">stethoscope</span>
+                  </div>
+                  <h4 className="font-bold text-lg mb-2">Expert Assessment</h4>
+                  <p className="text-white/70 text-sm">Get a personalized health evaluation based on Ayurvedic principles.</p>
+                </div>
+                <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm border border-white/20">
+                  <div className="w-12 h-12 bg-[#ef4444] rounded-lg flex items-center justify-center mb-4">
+                    <span className="material-symbols-outlined text-xl">healing</span>
+                  </div>
+                  <h4 className="font-bold text-lg mb-2">Custom Therapy</h4>
+                  <p className="text-white/70 text-sm">Receive a tailored treatment plan designed for your unique needs.</p>
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <button
+                  onClick={() => {
+                    setShowBooking(true);
+                    setStep(1);
+                    setSelectedTherapy(null);
+                    setSelectedDoctor(null);
+                    setAppointmentDate('');
+                    setAppointmentTime('');
+                    setError('');
+                  }}
+                  className="flex items-center space-x-2 bg-white text-[#064e3b] px-8 py-3.5 rounded-xl font-bold shadow-xl hover:shadow-2xl transition-all hover:scale-105"
+                >
+                  <span className="material-symbols-outlined">add_circle</span>
+                  <span>Book Your First Appointment</span>
+                </button>
+              </div>
+            </div>
+          </section>
+        ) : (
+          <>
+        {/* Progress Map Timeline - Show Only When Therapy Plan is Active */}
         <section className="mb-10">
           <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 overflow-hidden relative">
             <div className="flex justify-between items-center mb-10">
@@ -281,14 +443,14 @@ export default function UserAppointments() {
                 </div>
                 <div className="flex flex-col items-center scale-110 relative">
                   <div className="absolute -top-12 bg-[#064e3b] text-white text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider whitespace-nowrap">
-                    Scheduling
+                    In Progress
                   </div>
                   <div className="w-14 h-14 rounded-full bg-[#064e3b] border-4 border-white shadow-xl flex items-center justify-center text-white mb-3">
-                    <span className="material-symbols-outlined animate-spin">schedule</span>
+                    <span className="material-symbols-outlined animate-pulse">spa</span>
                   </div>
                   <div className="text-center">
                     <p className="text-[10px] font-bold text-[#064e3b] uppercase">Today</p>
-                    <p className="text-xs font-bold text-[#1f2937]">Booking</p>
+                    <p className="text-xs font-bold text-[#1f2937]">Active Treatment</p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center group">
@@ -326,75 +488,67 @@ export default function UserAppointments() {
           </div>
         </section>
 
-        {/* Appointments Grid */}
+        {/* Appointments Grid - Show Only When Therapy Plan is Active */}
         <div className="grid grid-cols-12 gap-8 items-start">
           <section className="col-span-12 lg:col-span-7">
             <div className="flex justify-between items-end mb-6">
               <div>
-                <h3 className="text-xl font-bold text-[#064e3b]">Upcoming Consultations</h3>
-                <p className="text-sm text-[#6b7280] mt-1">Get prepared for your next healing session.</p>
+                <h3 className="text-xl font-bold text-[#064e3b]">Upcoming Appointments</h3>
+                <p className="text-sm text-[#6b7280] mt-1">
+                  {appointments.length > 0 
+                    ? 'Get prepared for your next healing session.'
+                    : 'No upcoming appointments scheduled yet.'}
+                </p>
               </div>
-              <button className="text-sm text-[#10b981] font-semibold hover:text-[#064e3b] transition-colors">View all</button>
+              {appointments.length > 1 && (
+                <button className="text-sm text-[#10b981] font-semibold hover:text-[#064e3b] transition-colors">View all</button>
+              )}
             </div>
             <div className="space-y-6">
-              <div className="bg-white border-2 border-[#064e3b] rounded-[2rem] p-6 shadow-md transition-all hover:shadow-lg">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                  <div className="flex items-center space-x-6">
-                    <div className="flex flex-col items-center justify-center bg-[#064e3b] text-white w-20 h-20 rounded-2xl shadow-inner">
-                      <span className="text-xs font-bold uppercase opacity-80">OCT</span>
-                      <span className="text-3xl font-bold leading-none">24</span>
-                    </div>
-                    <div>
-                      <span className="inline-block px-2 py-0.5 bg-[#ecf3f0] text-[#064e3b] text-[10px] font-bold rounded uppercase mb-2">
-                        Priority
-                      </span>
-                      <h4 className="text-xl font-bold text-[#1f2937]">Shirodhara - Stress Relief</h4>
-                      <div className="flex items-center mt-1 space-x-4">
-                        <p className="text-sm flex items-center text-[#6b7280]">
-                          <span className="material-symbols-outlined text-lg mr-1 opacity-60">schedule</span>
-                          10:00 AM
-                        </p>
-                        <p className="text-sm flex items-center text-[#6b7280]">
-                          <span className="material-symbols-outlined text-lg mr-1 opacity-60">person</span>
-                          Dr. Sunita Nair
-                        </p>
+              {appointments.length > 0 ? (
+                appointments.slice(0, 2).map((appointment, index) => (
+                  <div key={appointment.id || index} className={`bg-white ${index === 0 ? 'border-2 border-[#064e3b]' : 'border border-gray-100'} rounded-[2rem] p-6 shadow-md transition-all hover:shadow-lg`}>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                      <div className="flex items-center space-x-6">
+                        <div className="flex flex-col items-center justify-center bg-[#064e3b] text-white w-20 h-20 rounded-2xl shadow-inner">
+                          <span className="text-xs font-bold uppercase opacity-80">
+                            {new Date(appointment.appointment_date).toLocaleDateString('en-US', { month: 'short' })}
+                          </span>
+                          <span className="text-3xl font-bold leading-none">
+                            {new Date(appointment.appointment_date).getDate()}
+                          </span>
+                        </div>
+                        <div>
+                          {index === 0 && (
+                            <span className="inline-block px-2 py-0.5 bg-[#ecf3f0] text-[#064e3b] text-[10px] font-bold rounded uppercase mb-2">
+                              Upcoming
+                            </span>
+                          )}
+                          <h4 className="text-xl font-bold text-[#1f2937]">{appointment.therapy_name || 'Therapy Session'}</h4>
+                          <div className="flex items-center mt-1 space-x-4">
+                            <p className="text-sm flex items-center text-[#6b7280]">
+                              <span className="material-symbols-outlined text-lg mr-1 opacity-60">schedule</span>
+                              {appointment.appointment_time || 'Time TBA'}
+                            </p>
+                            <p className="text-sm flex items-center text-[#6b7280]">
+                              <span className="material-symbols-outlined text-lg mr-1 opacity-60">person</span>
+                              {appointment.doctor_name || 'Specialist'}
+                            </p>
+                          </div>
+                        </div>
                       </div>
+                      <button className="flex-1 md:flex-none px-6 py-3 border border-[#064e3b] text-[#064e3b] font-bold rounded-xl hover:bg-[#ecf3f0] transition-all">
+                        {index === 0 ? 'Join Session' : 'Reschedule'}
+                      </button>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <button className="flex-1 md:flex-none px-6 py-3 bg-[#064e3b] text-white font-bold rounded-xl shadow-md hover:bg-opacity-90 transition-all">
-                      Join Session
-                    </button>
-                  </div>
+                ))
+              ) : (
+                <div className="bg-white border border-gray-200 rounded-[2rem] p-12 text-center">
+                  <span className="material-symbols-outlined text-5xl text-gray-300 flex justify-center mb-4">calendar_today</span>
+                  <p className="text-[#6b7280] font-medium">Your appointments will appear here once confirmed.</p>
                 </div>
-              </div>
-
-              <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm transition-all hover:border-[#10b981]/30">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                  <div className="flex items-center space-x-6">
-                    <div className="flex flex-col items-center justify-center bg-gray-50 text-gray-500 w-20 h-20 rounded-2xl">
-                      <span className="text-xs font-bold uppercase opacity-80">OCT</span>
-                      <span className="text-3xl font-bold leading-none">26</span>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-bold text-[#1f2937]">Panchakarma Consultation</h4>
-                      <div className="flex items-center mt-1 space-x-4">
-                        <p className="text-sm flex items-center text-[#6b7280]">
-                          <span className="material-symbols-outlined text-lg mr-1 opacity-60">schedule</span>
-                          02:30 PM
-                        </p>
-                        <p className="text-sm flex items-center text-[#6b7280]">
-                          <span className="material-symbols-outlined text-lg mr-1 opacity-60">person</span>
-                          Dr. Ananya Rao
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <button className="flex-1 md:flex-none px-6 py-3 border border-[#064e3b] text-[#064e3b] font-bold rounded-xl hover:bg-[#ecf3f0] transition-all">
-                    Reschedule
-                  </button>
-                </div>
-              </div>
+              )}
             </div>
           </section>
 
@@ -460,6 +614,8 @@ export default function UserAppointments() {
             </div>
           </section>
         </div>
+        </>
+        )}
       </main>
 
       {/* Booking Modal */}
